@@ -37,19 +37,45 @@ export default function FeaturedCarousel() {
   };
 
   return (
-    <section className="relative z-10 py-16">
+    /* Aumentamos pt-20 en móviles y sm:pt-28 lg:pt-32 en pantallas grandes para darle mucho aire arriba */
+    <section className="relative z-10 w-full pt-20 pb-12 sm:pt-28 lg:pt-32 sm:pb-16">
       
+      {/* ==========================================
+          TÍTULO DE LA SECCIÓN
+          ========================================== */}
+      <div className="max-w-[1200px] mx-auto px-6 mb-8 text-center">
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="font-nunito font-black text-3xl sm:text-4xl text-bonbon-dark tracking-tight"
+        >
+          Productos que <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8A64A3] to-[#4A2559]">aman!</span>
+        </motion.h2>
+        
+        <motion.p 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-[13px] sm:text-[15px] font-bold text-gray-400 mt-2 tracking-wide uppercase"
+        >
+          Los favoritos de nuestros clientes
+        </motion.p>
+      </div>
+
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 gap-6 pb-8"
+        className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 gap-6 py-4"
       >
         {PRODUCTS.map((prod) => (
           <div 
             key={prod.id} 
             className="snap-center shrink-0 w-[88vw] max-w-[400px] relative flex items-center min-h-[240px] bg-white/50 backdrop-blur-md rounded-[2.5rem] p-6 sm:p-8 border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
           >
-            {/* Lado Izquierdo: Textos (z-30 asegura que SIEMPRE esté encima de la imagen) */}
+            {/* Lado Izquierdo: Textos */}
             <div className="w-[55%] z-30 relative">
               <h2 className="font-nunito font-black text-3xl sm:text-4xl text-bonbon-dark leading-[1.05] tracking-tight">
                 {prod.title}
@@ -65,7 +91,7 @@ export default function FeaturedCarousel() {
               </p>
             </div>
 
-            {/* Lado Derecho: Imagen (Controlada para no aplastar el texto) */}
+            {/* Lado Derecho: Imagen */}
             <div className="absolute right-[-10%] sm:right-[-5%] top-1/2 -translate-y-1/2 w-[55%] sm:w-[50%] max-w-[200px] z-20 pointer-events-none">
               <motion.img
                 initial={{ opacity: 0, x: 40, scale: 0.9 }}
@@ -82,7 +108,7 @@ export default function FeaturedCarousel() {
       </div>
 
       {/* Contenedor de Paginación Mejorado */}
-      <div className="flex flex-col items-center mt-2">
+      <div className="flex flex-col items-center mt-4 sm:mt-6">
         
         {/* Texto sutil para indicar interacción */}
         <div className="flex items-center gap-1 text-[9px] font-black text-bonbon-dark/50 uppercase tracking-widest mb-3">
@@ -92,7 +118,7 @@ export default function FeaturedCarousel() {
           </svg>
         </div>
 
-        {/* Cápsula de los puntitos con sombra y desenfoque para resaltar sobre el fondo */}
+        {/* Cápsula de los puntitos */}
         <div className="flex justify-center gap-3 bg-white/60 backdrop-blur-md px-4 py-2.5 rounded-full shadow-md border border-white/50">
           {PRODUCTS.map((_, index) => (
             <motion.div 
