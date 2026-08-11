@@ -17,6 +17,7 @@ const MenuIcon = ({ className }) => (
 
 const CloseIcon = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={className}>
+    {/* ¡Aquí estaba el error! Faltaba el 18 para completar la X */}
     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
   </svg>
 );
@@ -63,7 +64,6 @@ export default function HeroSection() {
       {/* ===========================================
           BARRA DE NAVEGACIÓN (Top Bar)
           =========================================== */}
-      {/* Aumentamos el margen inferior para separar la cabecera del contenido */}
       <header className="relative z-50 w-full max-w-[1200px] mx-auto flex justify-between items-center mb-12 sm:mb-20">
         
         {/* Logo en SVG */}
@@ -89,19 +89,14 @@ export default function HeroSection() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="w-10 h-10 flex items-center justify-end text-[#4A2559] cursor-pointer"
           >
-            {/* Contenedor animado CORREGIDO para rotar el icono suavemente */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={isMenuOpen ? "close" : "menu"}
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="absolute right-0"
-              >
-                {isMenuOpen ? <CloseIcon className="w-7 h-7" /> : <MenuIcon className="w-7 h-7" />}
-              </motion.div>
-            </AnimatePresence>
+            {/* Animación fluida de giro para la hamburguesa y la X */}
+            <motion.div
+              initial={false}
+              animate={{ rotate: isMenuOpen ? 90 : 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              {isMenuOpen ? <CloseIcon className="w-7 h-7" /> : <MenuIcon className="w-7 h-7" />}
+            </motion.div>
           </motion.button>
 
           <AnimatePresence>
@@ -137,39 +132,52 @@ export default function HeroSection() {
         
         <div className="w-full max-w-[550px] flex flex-col items-center text-center relative mt-4 sm:mt-8">
           
-          {/* 1. Título Superior (Estático) */}
+          {/* 1. Título Superior (Entra de Izquierda a Derecha) */}
           <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-            className="font-nunito font-black text-[3.5rem] sm:text-[4.5rem] text-[#3A1D47] leading-none tracking-tight self-start ml-2 sm:ml-6 relative z-10"
+            initial={{ opacity: 0, x: -50, y: 0 }}
+            animate={{ 
+              opacity: 1, 
+              x: 0,
+              y: [-3, 3, -3] 
+            }}
+            transition={{ 
+              opacity: { duration: 0.8, delay: 0.1, ease: "easeOut" },
+              x: { duration: 0.8, delay: 0.1, ease: "easeOut" },
+              y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.9 }
+            }}
+            className="font-nunito font-black text-[3.5rem] sm:text-[4.5rem] text-[#3A1D47] leading-none tracking-tight self-start ml-2 sm:ml-6 relative z-10 px-2"
           >
             Tu pastel,
           </motion.h2>
 
-          {/* 2. Imagen del Pastel (Animada/Flotando) 
-              Usamos márgenes negativos (-my-6) para que se encime ligeramente en los textos */}
+          {/* 2. Imagen del Pastel (ESTÁTICA, solo animación de entrada suave) */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="w-full flex justify-center -my-6 sm:-my-6 relative z-20"
           >
-            <motion.img 
-              animate={{ y: [-8, 8, -8] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            <img 
               src={PastelImage} 
               alt="Pastel BonBon" 
               className="w-full max-w-[260px] sm:max-w-[340px] object-contain drop-shadow-2xl"
             />
           </motion.div>
 
-          {/* 3. Título Inferior (Estático) */}
+          {/* 3. Título Inferior (Entra de Derecha a Izquierda) */}
           <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
-            className="font-nunito font-black text-[3.5rem] sm:text-[4.5rem] text-[#8A64A3] leading-none tracking-tight self-end mr-2 sm:mr-6 relative z-10 mb-10"
+            initial={{ opacity: 0, x: 50, y: 0 }}
+            animate={{ 
+              opacity: 1, 
+              x: 0,
+              y: [3, -3, 3]
+            }}
+            transition={{ 
+              opacity: { duration: 0.8, delay: 0.3, ease: "easeOut" },
+              x: { duration: 0.8, delay: 0.3, ease: "easeOut" },
+              y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.1 } 
+            }}
+            className="font-nunito font-black text-[3.5rem] sm:text-[4.5rem] text-[#8A64A3] leading-none tracking-tight self-end mr-2 sm:mr-6 relative z-10 mb-10 px-2"
           >
             tu estilo.
           </motion.h2>
@@ -178,10 +186,10 @@ export default function HeroSection() {
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+            transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
             className="text-[#6A527A] font-extrabold mb-8 text-[15px] sm:text-[17px] leading-relaxed max-w-[90%]"
           >
-            Empieza aquí: elige, personaliza y cotiza fácil.
+            Descubre y cotiza fácil para personalizar tu pedido y disfruta de la experiencia de Bon Bon.
           </motion.p>
 
           {/* ===========================================
@@ -191,7 +199,7 @@ export default function HeroSection() {
             onClick={scrollToForm}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4, ease: "easeOut" }}
+            transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
             whileHover={{ scale: 1.03, y: -2, boxShadow: "0px 10px 25px rgba(74,37,89,0.25)" }}
             whileTap={{ scale: 0.96 }}
             className="group relative flex items-center gap-3 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-white font-black text-[15px] sm:text-[16px] rounded-full pl-6 pr-2 py-2 shadow-[0_8px_15px_rgba(138,100,163,0.3)] cursor-pointer "

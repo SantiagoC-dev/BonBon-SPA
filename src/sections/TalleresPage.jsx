@@ -36,6 +36,12 @@ export default function TalleresPage() {
   
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
+  // Resetea el scroll de la ventana al montar este componente
+  // Esto previene que herede el scroll position de la página anterior
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   function calculateTimeLeft() {
     const difference = targetDate - new Date().getTime();
     let timeLeft = {};
@@ -68,8 +74,8 @@ export default function TalleresPage() {
   };
 
   return (
-    /* Quitamos el bg sólido para permitir que BackgroundDecorations se muestre */
-    <main className="relative min-h-screen font-nunito flex flex-col overflow-hidden">
+    /* AGREGADO: overflow-x-hidden w-full max-w-[100vw] para evitar el deslizamiento horizontal accidental en móviles */
+    <main className="relative min-h-screen font-nunito flex flex-col overflow-x-hidden w-full max-w-[100vw]">
       
       {/* FONDO GLOBALIZADO */}
       <BackgroundDecorations tone="purple" />

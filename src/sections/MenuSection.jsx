@@ -15,22 +15,22 @@ const HeartBgIcon = ({ className }) => (
   </svg>
 );
 
-// DATOS
+// DATOS ESTRATÉGICOS DEL CATÁLOGO
 const MAIN_PRODUCTS = [
-  { id: 1, name: 'Caja Artesanal', description: 'Surtido de 12 pastelitos horneados esta mañana. Incluye rellenos de crema pastelera y ganache de chocolate.', price: 15, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=300&auto=format&fit=crop' },
-  { id: 2, name: 'Pastel de chocolate', description: 'Bizcocho ultra húmedo bañado en tres leches con relleno de ganache oscuro semi-amargo.', price: 25, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=300&auto=format&fit=crop' },
-  { id: 3, name: 'Pastel de fresas', description: 'Nube de vainilla con capas de crema chantilly fresca y trozos de fresas naturales.', price: 22, image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=300&auto=format&fit=crop' },
-  { id: 4, name: 'Pastel moka', description: 'Bizcocho esponjoso infusionado con café espresso de especialidad y cubierto de crema.', price: 24, image: 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?q=80&w=300&auto=format&fit=crop' },
+  { id: 1, name: 'Pastel Personalizado', description: 'Diseño a tu medida. Elige tamaño, sabor de pan y relleno. Cobertura impecable con nuestro característico buttercream suizo.', price: 450, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=300&auto=format&fit=crop' },
+  { id: 2, name: 'Ramo Cupcakes Florales', description: 'Hermoso arreglo comestible. Esponjosos cupcakes decorados a mano con detalladas flores de buttercream de merengue suizo.', price: 380, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=300&auto=format&fit=crop' },
+  { id: 3, name: 'Cupcakes de Zanahoria', description: 'Nuestra receta especial y especiada de zanahoria, coronados con un suave, equilibrado y delicioso buttercream de queso crema.', price: 220, image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=300&auto=format&fit=crop' },
+  { id: 4, name: 'Caja de Cupcakes', description: 'La opción perfecta para cualquier antojo. Disponibles en sabores clásicos, rellenos y decorados con merengue suizo.', price: 180, image: 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?q=80&w=300&auto=format&fit=crop' },
 ];
 
 const FEATURED_NEW = [
-  { id: 10, name: 'Galletas Matcha', description: 'Galletas suaves horneadas con té verde matcha ceremonial importado y chocolate blanco.', price: 10, image: 'https://images.unsplash.com/photo-162146656027e-4b1bd88f4028?q=80&w=300&auto=format&fit=crop', badge: 'Nuevo' },
-  { id: 11, name: 'Pastel Red Velvet', description: 'Auténtico terciopelo rojo con un sutil toque a cacao y el clásico frosting de queso crema.', price: 25, image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=300&auto=format&fit=crop', badge: 'Nuevo' },
+  { id: 10, name: 'Pastel Dulce de Leche', description: 'Exquisito pastel de vainilla relleno con abundante dulce de leche artesanal y cubierto con nuestro buttercream especial.', price: 500, image: 'https://images.unsplash.com/photo-162146656027e-4b1bd88f4028?q=80&w=300&auto=format&fit=crop', badge: 'Nuevo' },
+  { id: 11, name: 'Cupcakes de Zanahoria', description: 'Cupcakes de zanahoria decorados con buttercream de queso crema y detalles premium.', price: 250, image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=300&auto=format&fit=crop', badge: 'Nuevo' },
 ];
 
 const FEATURED_SALE = [
-  { id: 20, name: 'Pastel de vainilla', description: 'El favorito de siempre. Preparado con extracto de vainilla puro y mantequilla.', price: 12, image: 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?q=80&w=300&auto=format&fit=crop', badge: 'Oferta' },
-  { id: 21, name: 'Pastelitos mixtos', description: 'Caja perfecta para compartir: incluye 6 croissants de almendra y 6 muffins esponjosos.', price: 10, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=300&auto=format&fit=crop', badge: 'Oferta' },
+  { id: 20, name: 'Pastel Ganache (21cm)', description: 'Pastel personalizado de 21cm, con exquisito relleno de ganache semiamargo. Ideal para celebraciones inolvidables.', price: 580, oldPrice: 650, image: 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?q=80&w=300&auto=format&fit=crop', badge: 'Oferta' },
+  { id: 21, name: 'Ramo Mixto (12pz)', description: 'Impresionante ramo floral de 12 piezas. Sabores mixtos, rellenos y decorados con arte botánico en buttercream.', price: 420, oldPrice: 480, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=300&auto=format&fit=crop', badge: 'Oferta' },
 ];
 
 export default function MenuSection() {
@@ -67,8 +67,7 @@ export default function MenuSection() {
   };
 
   return (
- 
-    <section className="relative z-20 bg-[] w-full pt-16 pb-16 sm:pt-24 sm:pb-24 mt-0">
+    <section className="relative z-20 w-full pt-16 pb-16 sm:pt-24 sm:pb-24 mt-0">
       
       <style>{`
         @keyframes menuWaveDriftLeft {
@@ -107,7 +106,7 @@ export default function MenuSection() {
       {/* =========================================
           FONDO MÁGICO ANIMADO
           ========================================= */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.08] text-[#8A64A3]">
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.18] text-[#8A64A3]">
         <motion.div animate={{ y: [0, -15, 0], rotate: [12, 18, 12] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }} className="absolute top-[8%] left-[8%]">
           <StarBgIcon className="w-24 h-24" />
         </motion.div>

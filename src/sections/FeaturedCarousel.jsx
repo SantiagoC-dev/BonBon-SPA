@@ -3,8 +3,9 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 // Tus imágenes exactas
-import cupcake1 from '../assets/1.png'; 
-import cupcake2 from '../assets/2.webp'; 
+import cupcake1 from '../assets/Ramo.svg'; 
+import cupcake2 from '../assets/Caja.svg'; 
+import pastelImg from '../assets/Pastel.svg'; // Agregamos la imagen para el 3er item
 
 const PRODUCTS = [
   {
@@ -17,9 +18,16 @@ const PRODUCTS = [
   {
     id: 2,
     title: 'Caja de',
-    subtitle: 'cupcakes especiales',
-    desc: 'Deliciosa receta de zanahoria decorados con buttercream de queso crema.',
+    subtitle: 'cupcakes florales',
+    desc: 'Deliciosa caja de cupcakes florales rellenos y decorados con buttercream de merengue suizo.',
     img: cupcake2,
+  },
+  {
+    id: 3,
+    title: 'Pastel de',
+    subtitle: 'vainilla',
+    desc: 'Pastel de vainilla personalizado con relleno de ganache blanco decorado con buttercream de merengue suizo.',
+    img: pastelImg,
   }
 ];
 
@@ -43,7 +51,7 @@ export default function FeaturedCarousel() {
       {/* ==========================================
           TÍTULO DE LA SECCIÓN
           ========================================== */}
-      <div className="max-w-[1200px] mx-auto px-6 mb-8 text-center">
+      <div className="max-w-[1200px] mx-auto px-6 mb-8 text-center flex flex-col items-center">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -54,12 +62,13 @@ export default function FeaturedCarousel() {
           Productos que aman!
         </motion.h2>
         
+        {/* Agregamos mx-auto y text-center para que quede perfectamente alineado */}
         <motion.p 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-bonbon-dark/70 font-extrabold mb-8 text-[15px] sm:text-[16px] leading-relaxed max-w-[90%]"
+          className="text-bonbon-dark/70 font-extrabold mb-8 text-[15px] sm:text-[16px] leading-relaxed max-w-[90%] mx-auto text-center"
         >
           Los favoritos de nuestros clientes
         </motion.p>
@@ -68,12 +77,13 @@ export default function FeaturedCarousel() {
       <div 
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 gap-6 py-4"
+        className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 gap-6 py-1 sm:gap-8 sm:px-8"
       >
         {PRODUCTS.map((prod) => (
           <div 
             key={prod.id} 
-            className="snap-center shrink-0 w-[88vw] max-w-[400px] relative flex items-center min-h-[240px] bg-white/50 backdrop-blur-md rounded-[2.5rem] p-6 sm:p-8 border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
+            /* Se eliminó la clase shadow-[...] para quitar el sombreado */
+            className="snap-center shrink-0 w-[88vw] max-w-[400px] relative flex items-center min-h-[240px] bg-white/50 backdrop-blur-md rounded-[2.5rem] p-6 sm:p-8 border border-white/60"
           >
             {/* Lado Izquierdo: Textos */}
             <div className="w-[55%] z-30 relative">
@@ -109,14 +119,6 @@ export default function FeaturedCarousel() {
 
       {/* Contenedor de Paginación Mejorado */}
       <div className="flex flex-col items-center mt-4 sm:mt-6">
-        
-        {/* Texto sutil para indicar interacción */}
-        <div className="flex items-center gap-1 text-[9px] font-black text-bonbon-dark/50 uppercase tracking-widest mb-3">
-          <span>Desliza</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3 h-3">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
 
         {/* Cápsula de los puntitos */}
         <div className="flex justify-center gap-3 bg-white/60 backdrop-blur-md px-4 py-2.5 rounded-full shadow-md border border-white/50">

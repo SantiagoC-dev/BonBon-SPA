@@ -69,7 +69,7 @@ export default function AboutSection() {
 
   return (
     <>
-      <section className="relative z-20 w-full pt-20 pb-24 px-6 mt-0">
+      <section className="relative z-20 w-full pt-20 pb-24 px-6 mt-10">
         
         {/* SEPARADOR SUPERIOR: línea sutil con acento central en vez de ola */}
         <div className="absolute bottom-full left-1/2 -translate-x-1/2 flex items-center gap-3 pb-3 pointer-events-none w-52 sm:w-72">
@@ -90,8 +90,14 @@ export default function AboutSection() {
               {/* Contenedor circular interno oscuro */}
               <div className="w-full h-full bg-[#4A2559] rounded-full border-4 border-white flex items-center justify-center overflow-hidden relative">
                 
-                {/* Logo BonBon */}
-                <img src={bonLogo} alt="BonBon Logo" className="w-14 h-14 object-contain brightness-0 invert opacity-90" />
+                {/* Logo BonBon con animación minimalista de pulsación */}
+                <motion.img 
+                  src={bonLogo} 
+                  alt="BonBon Logo" 
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-14 h-14 object-contain brightness-0 invert opacity-90" 
+                />
 
               </div>
             </motion.div>

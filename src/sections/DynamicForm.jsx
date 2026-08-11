@@ -69,6 +69,14 @@ export default function DynamicForm() {
     window.open(url, '_blank');
   };
 
+  // Configuración de animación súper ligera
+  const formAnimation = {
+    initial: { opacity: 0, scaleY: 0.9, originY: 0, marginTop: 0 },
+    animate: { opacity: 1, scaleY: 1, marginTop: '1.25rem' },
+    exit: { opacity: 0, scaleY: 0.9, marginTop: 0 },
+    transition: { duration: 0.2, ease: "easeOut" }
+  };
+
   return (
     <section id="formulario-pedido" className="relative z-10 w-full pt-20 pb-32 px-6 flex flex-col items-center overflow-hidden">
       
@@ -88,7 +96,7 @@ export default function DynamicForm() {
 
       <div className="w-full max-w-[400px] relative z-10">
         
-        {/* TÍTULO (Sin fondo ni degradado) */}
+        {/* TÍTULO */}
         <div className="text-center mb-10">
           <motion.h2 
             initial={{ opacity: 0, y: -10 }}
@@ -109,9 +117,7 @@ export default function DynamicForm() {
           </motion.p>
         </div>
 
-        {/* ==========================================
-            TARJETA DEL FORMULARIO (Glassmorphism)
-            ========================================== */}
+        {/* TARJETA DEL FORMULARIO */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -119,10 +125,11 @@ export default function DynamicForm() {
           transition={{ duration: 0.5 }}
           className="w-full bg-white/70 backdrop-blur-xl border border-white/80 rounded-[2.5rem] shadow-[0_20px_40px_rgba(74,37,89,0.08)] p-7 sm:p-9"
         >
-          <form onSubmit={handleSubmit} className="space-y-5">
+          {/* El layout prop permite animar el tamaño del contenedor suavemente cuando se añaden campos */}
+          <motion.form layout onSubmit={handleSubmit} className="space-y-5">
             
-            {/* INPUT NOMBRE */}
-            <div>
+            {/* INPUT NOMBRE - text-[16px] OBLIGATORIO PARA EVITAR ZOOM EN iPHONE */}
+            <motion.div layout>
               <label className="text-[11.5px] font-black text-[#4A2559] block mb-2 pl-1 uppercase tracking-wider">Tu Nombre</label>
               <input
                 type="text"
@@ -131,12 +138,12 @@ export default function DynamicForm() {
                 onChange={handleChange}
                 placeholder="Ej. María Pérez"
                 required
-                className="w-full rounded-2xl border-2 border-white/60 bg-white/50 px-4 py-3.5 text-[14px] font-bold text-[#4A2559] focus:outline-none focus:bg-white focus:border-[#8A64A3] transition-all shadow-sm placeholder:text-[#8A64A3]/50"
+                className="w-full rounded-2xl border-2 border-white/60 bg-white/50 px-4 py-3.5 text-[16px] font-bold text-[#4A2559] focus:outline-none focus:bg-white focus:border-[#8A64A3] transition-all shadow-sm placeholder:text-[#8A64A3]/50"
               />
-            </div>
+            </motion.div>
 
-            {/* SELECT PRINCIPAL */}
-            <div>
+            {/* SELECT PRINCIPAL - text-[16px] OBLIGATORIO PARA EVITAR ZOOM EN iPHONE */}
+            <motion.div layout>
               <label className="text-[11.5px] font-black text-[#4A2559] block mb-2 pl-1 uppercase tracking-wider">¿Qué deseas pedir?</label>
               <div className="relative">
                 <select
@@ -144,29 +151,24 @@ export default function DynamicForm() {
                   value={formData.categoria}
                   onChange={handleChange}
                   required
-                  className="w-full appearance-none rounded-2xl border-2 border-white/60 bg-white/50 px-4 py-3.5 pr-10 text-[14px] font-bold text-[#4A2559] focus:outline-none focus:bg-white focus:border-[#8A64A3] transition-all shadow-sm cursor-pointer"
+                  className="w-full appearance-none rounded-2xl border-2 border-white/60 bg-white/50 px-4 py-3.5 pr-10 text-[16px] font-bold text-[#4A2559] focus:outline-none focus:bg-white focus:border-[#8A64A3] transition-all shadow-sm cursor-pointer"
                 >
                   <option value="" disabled>Selecciona una opción...</option>
                   <option value="pastel">Pastel personalizado</option>
                   <option value="ramo">Ramo de Cupcakes</option>
                   <option value="caja">Caja de cupcakes</option>
-                  <option value="zanahoria">Cupcakes de Zanahoria (especiales)</option>
+                  <option value="zanahoria">Cupcakes de Zanahoria</option>
                 </select>
                 <ChevronDownIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A64A3] pointer-events-none" />
               </div>
-            </div>
+            </motion.div>
 
-            {/* RUTAS DINÁMICAS ANIMADAS */}
-            <AnimatePresence mode="sync">
+            {/* RUTAS DINÁMICAS ANIMADAS LIGERAS */}
+            <AnimatePresence mode="popLayout">
               
               {/* PASTEL */}
               {formData.categoria === 'pastel' && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: '1.25rem' }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  className="overflow-hidden space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1"
-                >
+                <motion.div {...formAnimation} className="space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1">
                   {['tamanoPastel', 'panPastel', 'rellenoPastel'].map((field, idx) => {
                     const placeholders = ['Tamaño...', 'Sabor del pan...', 'Relleno...'];
                     const options = [
@@ -176,7 +178,8 @@ export default function DynamicForm() {
                     ];
                     return (
                       <div className="relative" key={field}>
-                        <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[13.5px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
+                        {/* text-[16px] para evitar zoom */}
+                        <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[16px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
                           <option value="" disabled>{placeholders[idx]}</option>
                           {options[idx].map(opt => <option key={opt} value={opt}>{opt}</option>)}
                         </select>
@@ -192,18 +195,13 @@ export default function DynamicForm() {
 
               {/* RAMO */}
               {formData.categoria === 'ramo' && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: '1.25rem' }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  className="overflow-hidden space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1"
-                >
+                <motion.div {...formAnimation} className="space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1">
                   {['cantidadRamo', 'saborRamo', 'rellenoRamo'].map((field, idx) => {
                     const placeholders = ['Cantidad...', 'Sabor...', '¿Llevan relleno?'];
                     const options = [['7 pz', '12 pz', '19 pz'], ['Vainilla', 'Chocolate', 'Mixto'], ['Sí', 'No']];
                     return (
                       <div className="relative" key={field}>
-                        <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[13.5px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
+                        <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[16px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
                           <option value="" disabled>{placeholders[idx]}</option>
                           {options[idx].map(opt => <option key={opt} value={opt}>{opt}</option>)}
                         </select>
@@ -219,18 +217,13 @@ export default function DynamicForm() {
 
               {/* CAJA */}
               {formData.categoria === 'caja' && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: '1.25rem' }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  className="overflow-hidden space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1"
-                >
+                <motion.div {...formAnimation} className="space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1">
                   {['cantidadCaja', 'saborCaja', 'rellenoCaja'].map((field, idx) => {
                     const placeholders = ['Cantidad...', 'Sabor...', '¿Llevan relleno?'];
                     const options = [['4 pz', '6 pz', '12 pz'], ['Vainilla', 'Chocolate', 'Mixto'], ['Sí', 'No']];
                     return (
                       <div className="relative" key={field}>
-                        <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[13.5px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
+                        <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[16px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
                           <option value="" disabled>{placeholders[idx]}</option>
                           {options[idx].map(opt => <option key={opt} value={opt}>{opt}</option>)}
                         </select>
@@ -246,14 +239,9 @@ export default function DynamicForm() {
 
               {/* ZANAHORIA */}
               {formData.categoria === 'zanahoria' && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: '1.25rem' }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  className="overflow-hidden space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1"
-                >
+                <motion.div {...formAnimation} className="space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1">
                   <div className="relative">
-                    <select name="presentacionZanahoria" value={formData.presentacionZanahoria} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[13.5px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
+                    <select name="presentacionZanahoria" value={formData.presentacionZanahoria} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[16px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
                       <option value="" disabled>Presentación...</option>
                       <option value="Caja de 4 pz">Caja de 4 pz</option>
                       <option value="Caja de 6 pz">Caja de 6 pz</option>
@@ -270,6 +258,7 @@ export default function DynamicForm() {
             </AnimatePresence>
 
             <motion.button 
+              layout
               type="submit" 
               whileHover={{ scale: 1.03, y: -2, boxShadow: "0px 10px 25px rgba(74,37,89,0.25)" }}
               whileTap={{ scale: 0.96 }}
@@ -279,7 +268,7 @@ export default function DynamicForm() {
               Enviar WhatsApp
             </motion.button>
             
-          </form>
+          </motion.form>
         </motion.div>
       </div>
 

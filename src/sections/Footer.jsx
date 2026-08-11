@@ -1,6 +1,6 @@
 // src/sections/Footer.jsx
 import { FacebookIcon, InstagramIcon } from '../components/Icons';
-import pastelImg from '../assets/Pastel.png';
+import pastelImg from '../assets/FooterCake.svg'; 
 
 // Ícono de TikTok
 const TikTokIcon = ({ className }) => (
