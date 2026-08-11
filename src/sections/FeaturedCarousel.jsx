@@ -51,7 +51,7 @@ export default function FeaturedCarousel() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="font-nunito font-black text-3xl sm:text-4xl text-bonbon-dark tracking-tight"
         >
-          Productos que <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8A64A3] to-[#4A2559]">aman!</span>
+          Productos que aman!
         </motion.h2>
         
         <motion.p 
@@ -59,7 +59,7 @@ export default function FeaturedCarousel() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-[13px] sm:text-[15px] font-bold text-gray-400 mt-2 tracking-wide uppercase"
+          className="text-bonbon-dark/70 font-extrabold mb-8 text-[15px] sm:text-[16px] leading-relaxed max-w-[90%]"
         >
           Los favoritos de nuestros clientes
         </motion.p>

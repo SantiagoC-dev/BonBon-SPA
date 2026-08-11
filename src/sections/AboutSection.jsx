@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Tu logo importado
-import bonLogo from '../assets/BonLogo.svg';
+import bonLogo from '../assets/BonBunny.svg';
 
 // Íconos limpios y cute
 const CloseIcon = ({ className }) => (
@@ -92,9 +92,7 @@ export default function AboutSection() {
                 
                 {/* Logo BonBon */}
                 <img src={bonLogo} alt="BonBon Logo" className="w-14 h-14 object-contain brightness-0 invert opacity-90" />
-                
-                {/* Decoración cute */}
-                <SparkleIcon className="absolute top-2 right-2 w-4 h-4 text-[#E2D1EB] opacity-60" />
+
               </div>
             </motion.div>
           </div>
@@ -110,9 +108,9 @@ export default function AboutSection() {
 
             <motion.button 
               onClick={() => setIsModalOpen(true)}
-              whileHover={{ scale: 1.03, y: -2, boxShadow: "0px 10px 20px rgba(74,37,89,0.25)" }}
+              whileHover={{ scale: 1.03, y: -2, boxShadow: "0px 10px 25px rgba(74,37,89,0.25)" }}
               whileTap={{ scale: 0.96 }}
-              className="w-full flex items-center justify-center gap-2 bg-[#4A2559] text-white font-black text-[15px] py-4 rounded-2xl transition-all border border-[#3A1D47]"
+              className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-white font-black text-[15px] rounded-2xl py-4 transition-all cursor-pointer shadow-[0_8px_15px_rgba(138,100,163,0.3)]"
             >
               <CertificateIcon className="w-5 h-5" />
               Ver mis certificados

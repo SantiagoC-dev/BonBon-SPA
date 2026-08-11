@@ -67,10 +67,8 @@ export default function MenuSection() {
   };
 
   return (
-    /* 
-      Fondo integrado con un lila suave premium (#F5EDF9)
-    */
-    <section className="relative z-20 bg-[#F5EDF9] w-full pt-16 pb-16 sm:pt-24 sm:pb-24 mt-0">
+ 
+    <section className="relative z-20 bg-[] w-full pt-16 pb-16 sm:pt-24 sm:pb-24 mt-0">
       
       <style>{`
         @keyframes menuWaveDriftLeft {
@@ -96,12 +94,12 @@ export default function MenuSection() {
       <div className="absolute bottom-full left-0 w-full h-[36px] sm:h-[48px] overflow-hidden leading-none pointer-events-none translate-y-[1px]">
         <div className="menu-wave-top-back absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
-            <path fill="#F5EDF9" fillOpacity="0.6" d="M0,60 C288,20 432,20 720,60 C1008,100 1152,100 1440,60 C1728,20 1872,20 2160,60 C2448,100 2592,100 2880,60 V120 H0 Z" />
+            <path fill="#835894" fillOpacity="0.6" d="M0,60 C288,20 432,20 720,60 C1008,100 1152,100 1440,60 C1728,20 1872,20 2160,60 C2448,100 2592,100 2880,60 V120 H0 Z" />
           </svg>
         </div>
         <div className="menu-wave-top-front absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
-            <path fill="#F5EDF9" d="M0,60 C288,100 432,100 720,60 C1008,20 1152,20 1440,60 C1728,100 1872,100 2160,60 C2448,20 2592,20 2880,60 V120 H0 Z" />
+            <path fill="#835894" d="M0,60 C288,100 432,100 720,60 C1008,20 1152,20 1440,60 C1728,100 1872,100 2160,60 C2448,20 2592,20 2880,60 V120 H0 Z" />
           </svg>
         </div>
       </div>
@@ -253,12 +251,12 @@ export default function MenuSection() {
       <div className="absolute top-full left-0 w-full h-[36px] sm:h-[48px] overflow-hidden leading-none pointer-events-none -mt-[1px]">
         <div className="menu-wave-bottom-back absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
-            <path fill="#F5EDF9" fillOpacity="0.6" d="M0,60 C288,100 432,100 720,60 C1008,20 1152,20 1440,60 C1728,100 1872,100 2160,60 C2448,20 2592,20 2880,60 V0 H0 Z" />
+            <path fill="#835894" fillOpacity="0.6" d="M0,60 C288,100 432,100 720,60 C1008,20 1152,20 1440,60 C1728,100 1872,100 2160,60 C2448,20 2592,20 2880,60 V0 H0 Z" />
           </svg>
         </div>
         <div className="menu-wave-bottom-front absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
-            <path fill="#F5EDF9" d="M0,60 C288,20 432,20 720,60 C1008,100 1152,100 1440,60 C1728,20 1872,20 2160,60 C2448,100 2592,100 2880,60 V0 H0 Z" />
+            <path fill="#835894" d="M0,60 C288,20 432,20 720,60 C1008,100 1152,100 1440,60 C1728,20 1872,20 2160,60 C2448,100 2592,100 2880,60 V0 H0 Z" />
           </svg>
         </div>
       </div>
