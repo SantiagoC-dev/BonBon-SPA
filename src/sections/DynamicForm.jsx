@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // TODO: reemplaza con el número real de WhatsApp (ej. 525500000000)
-const WHATSAPP_NUMBER = '525521105157';
+const WHATSAPP_NUMBER = '525585489414';
 
 // Íconos
 const WhatsAppIcon = ({ className }) => (
@@ -66,7 +66,7 @@ export default function DynamicForm() {
     }
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
-    window.open(url, '_blank');
+    window.location.href = url;
   };
 
   // Configuración de animación súper ligera
@@ -78,7 +78,7 @@ export default function DynamicForm() {
   };
 
   return (
-    <section id="formulario-pedido" className="relative z-10 w-full pt-20 pb-32 px-6 flex flex-col items-center overflow-hidden">
+    <section id="formulario-pedido" className="relative z-10 w-full pt-20 pb-32 lg:pb-40 px-6 flex flex-col items-center overflow-hidden">
       
       {/* MOTOR CSS NATIVO PARA OLAS DEL FOOTER */}
       <style>{`
@@ -94,43 +94,59 @@ export default function DynamicForm() {
         .form-wave-bottom-front { animation: formWaveDriftLeft 16s linear infinite; }
       `}</style>
 
-      <div className="w-full max-w-[400px] relative z-10">
+      {/* CONTENEDOR PRINCIPAL RESPONSIVO */}
+      {/* En móvil es columna, en desktop se pone lado a lado (texto izq, form der) */}
+      <div className="w-full max-w-[1000px] relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10 lg:gap-16">
         
-        {/* TÍTULO */}
-        <div className="text-center mb-10">
-          <motion.h2 
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-nunito font-black text-3xl sm:text-4xl text-[#4A2559] tracking-tight mb-1"
-          >
-            Haz tu pedido
-          </motion.h2>
+        {/* ==========================================
+            TÍTULO E IMPACTO VISUAL (Izquierda en PC)
+            ========================================== */}
+        <div className="text-center lg:text-left flex-1">
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-[12px] sm:text-[13px] font-black text-[#8A64A3] uppercase tracking-[0.2em]"
+            className="text-[12px] sm:text-[14px] lg:text-[16px] font-black text-[#8A64A3] uppercase tracking-[0.2em] mb-2"
           >
             Cotización rápida
           </motion.p>
+          <motion.h2 
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-nunito font-black text-4xl sm:text-5xl lg:text-[5rem] text-[#4A2559] tracking-tight leading-[1.05]"
+          >
+            Haz tu <br className="hidden lg:block"/> pedido
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="hidden lg:block mt-6 text-[#6A527A] font-bold text-[17px] leading-relaxed max-w-sm"
+          >
+            Llena los detalles de tu postre ideal y nos pondremos en contacto contigo de inmediato vía WhatsApp para confirmar tu orden.
+          </motion.p>
         </div>
 
-        {/* TARJETA DEL FORMULARIO */}
+        {/* ==========================================
+            TARJETA DEL FORMULARIO (Glassmorphism - Derecha en PC)
+            ========================================== */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="w-full bg-white/70 backdrop-blur-xl border border-white/80 rounded-[2.5rem] shadow-[0_20px_40px_rgba(74,37,89,0.08)] p-7 sm:p-9"
+          /* En móvil ocupa todo el ancho hasta 400px, en desktop crece hasta 500px */
+          className="w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto bg-white/70 backdrop-blur-xl border border-white/80 rounded-[2.5rem] shadow-[0_20px_40px_rgba(74,37,89,0.08)] p-7 sm:p-9 lg:p-10"
         >
           {/* El layout prop permite animar el tamaño del contenedor suavemente cuando se añaden campos */}
           <motion.form layout onSubmit={handleSubmit} className="space-y-5">
             
             {/* INPUT NOMBRE - text-[16px] OBLIGATORIO PARA EVITAR ZOOM EN iPHONE */}
             <motion.div layout>
-              <label className="text-[11.5px] font-black text-[#4A2559] block mb-2 pl-1 uppercase tracking-wider">Tu Nombre</label>
+              <label className="text-[11.5px] lg:text-[12.5px] font-black text-[#4A2559] block mb-2 pl-1 uppercase tracking-wider">Tu Nombre</label>
               <input
                 type="text"
                 name="nombre"
@@ -144,7 +160,7 @@ export default function DynamicForm() {
 
             {/* SELECT PRINCIPAL - text-[16px] OBLIGATORIO PARA EVITAR ZOOM EN iPHONE */}
             <motion.div layout>
-              <label className="text-[11.5px] font-black text-[#4A2559] block mb-2 pl-1 uppercase tracking-wider">¿Qué deseas pedir?</label>
+              <label className="text-[11.5px] lg:text-[12.5px] font-black text-[#4A2559] block mb-2 pl-1 uppercase tracking-wider">¿Qué deseas pedir?</label>
               <div className="relative">
                 <select
                   name="categoria"
@@ -279,13 +295,13 @@ export default function DynamicForm() {
         {/* Capa trasera de la ola inferior */}
         <div className="form-wave-bottom-back absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
-            <path fill="#3A1C42" fillOpacity="0.4" d="M0,60 C288,100 432,100 720,60 C1008,20 1152,20 1440,60 C1728,100 1872,100 2160,60 C2448,20 2592,20 2880,60 V120 H0 Z" />
+            <path fill="#4A2559" fillOpacity="0.4" d="M0,60 C288,100 432,100 720,60 C1008,20 1152,20 1440,60 C1728,100 1872,100 2160,60 C2448,20 2592,20 2880,60 V120 H0 Z" />
           </svg>
         </div>
         {/* Capa delantera sólida (mismo color que tu footer) */}
         <div className="form-wave-bottom-front absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
-            <path fill="#3A1C42" d="M0,60 C288,20 432,20 720,60 C1008,100 1152,100 1440,60 C1728,20 1872,20 2160,60 C2448,100 2592,100 2880,60 V120 H0 Z" />
+            <path fill="#4A2559" d="M0,60 C288,20 432,20 720,60 C1008,100 1152,100 1440,60 C1728,20 1872,20 2160,60 C2448,100 2592,100 2880,60 V120 H0 Z" />
           </svg>
         </div>
       </div>

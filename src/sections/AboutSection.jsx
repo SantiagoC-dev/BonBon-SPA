@@ -34,15 +34,15 @@ const ChevronIcon = ({ className, expanded }) => (
 const CERTIFICADOS = [
   { 
     id: 1, 
-    titulo: "Master en Repostería Francesa", 
-    anio: "2023",
-    descripcion: "Especialización intensiva en técnicas clásicas, viennoiserie y pastelería de vanguardia en la escuela de artes culinarias."
+    titulo: "Decorado vintage y técnicas clásicas de pastelería", 
+    anio: "2026",
+    descripcion: "Curso avanzado en decorado vintage y técnicas clásicas de pastelería, incluyendo glaseado, modelado y presentación."
   },
-  { 
+  {
     id: 2, 
-    titulo: "Especialidad en Buttercream Suizo", 
-    anio: "2022",
-    descripcion: "Dominio avanzado de texturas, colorimetría, espatulado y diseño floral con crema de mantequilla de merengue suizo."
+    titulo: "Decoración floral y texturas con crema de mantequilla de merengue suizo", 
+    anio: "2026",
+    descripcion: "Curso avanzado en decoración floral y texturas con crema de mantequilla de merengue suizo, enfocado en técnicas de acabado y presentación profesional."
   }
 ];
 
@@ -69,23 +69,25 @@ export default function AboutSection() {
 
   return (
     <>
-      <section className="relative z-20 w-full pt-20 pb-24 px-6 mt-10">
+      <section className="relative z-20 w-full pt-20 pb-24 lg:pb-32 px-6 mt-10">
         
         {/* SEPARADOR SUPERIOR: línea sutil con acento central en vez de ola */}
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 flex items-center gap-3 pb-3 pointer-events-none w-52 sm:w-72">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 flex items-center gap-3 pb-3 pointer-events-none w-52 sm:w-72 lg:w-96">
           <span className="flex-1 h-px bg-gradient-to-r from-transparent to-[#C9AEDA]" />
-          <SparkleIcon className="w-3.5 h-3.5 text-[#8A64A3] shrink-0" />
+          <SparkleIcon className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-[#8A64A3] shrink-0" />
           <span className="flex-1 h-px bg-gradient-to-l from-transparent to-[#C9AEDA]" />
         </div>
 
-        {/* TARJETA FLOTANTE */}
-        <div className="max-w-sm mx-auto relative z-10 bg-white rounded-[2.5rem] shadow-[0_20px_40px_rgba(74,37,89,0.08)] px-6 sm:px-8 pb-10 border border-[#E2D1EB]">
+        {/* TARJETA FLOTANTE RESPONSIVA */}
+        {/* En desktop (lg) permitimos que crezca hasta max-w-lg y agregamos un sutil backdrop-blur */}
+        <div className="max-w-sm sm:max-w-md lg:max-w-lg mx-auto relative z-10 bg-white/95 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_40px_rgba(74,37,89,0.08)] px-6 sm:px-10 lg:px-12 pb-10 lg:pb-12 border border-[#E2D1EB]">
           
           {/* Avatar con Logo y fondo morado profundo */}
-          <div className="relative flex justify-center -translate-y-12 mb-[-1.5rem]">
+          <div className="relative flex justify-center -translate-y-12 lg:-translate-y-14 mb-[-1.5rem] lg:mb-[-2rem]">
             <motion.div 
               whileHover={{ y: -5 }}
-              className="w-28 h-28 rounded-full bg-gradient-to-tr from-[#8A64A3] to-[#4A2559] p-[3px] shadow-xl"
+              // En pantallas grandes aumentamos un poco el tamaño del avatar
+              className="w-28 h-28 lg:w-32 lg:h-32 rounded-full bg-gradient-to-tr from-[#8A64A3] to-[#4A2559] p-[3px] shadow-xl"
             >
               {/* Contenedor circular interno oscuro */}
               <div className="w-full h-full bg-[#4A2559] rounded-full border-4 border-white flex items-center justify-center overflow-hidden relative">
@@ -96,7 +98,7 @@ export default function AboutSection() {
                   alt="BonBon Logo" 
                   animate={{ scale: [1, 1.08, 1] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-14 h-14 object-contain brightness-0 invert opacity-90" 
+                  className="w-14 h-14 lg:w-16 lg:h-16 object-contain brightness-0 invert opacity-90" 
                 />
 
               </div>
@@ -104,11 +106,11 @@ export default function AboutSection() {
           </div>
 
           <div className="text-center">
-            <h2 className="font-nunito font-black text-2xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#8A64A3] to-[#4A2559] leading-tight mb-4 tracking-tight">
+            <h2 className="font-nunito font-black text-2xl sm:text-3xl lg:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-[#8A64A3] to-[#4A2559] leading-tight mb-4 tracking-tight">
               Sobre mí
             </h2>
 
-            <p className="text-[13.5px] sm:text-[14.5px] font-bold leading-relaxed text-[#6A527A] mb-8 px-2">
+            <p className="text-[13.5px] sm:text-[14.5px] lg:text-[16px] font-bold leading-relaxed text-[#6A527A] mb-8 lg:mb-10 px-2 lg:px-4">
               Amante de la repostería desde hace más de <span className="text-[#4A2559] font-black">8 años</span>. Cada creación combina técnica perfecta, ingredientes premium y muchísimo amor.
             </p>
 
@@ -116,9 +118,9 @@ export default function AboutSection() {
               onClick={() => setIsModalOpen(true)}
               whileHover={{ scale: 1.03, y: -2, boxShadow: "0px 10px 25px rgba(74,37,89,0.25)" }}
               whileTap={{ scale: 0.96 }}
-              className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-white font-black text-[15px] rounded-2xl py-4 transition-all cursor-pointer shadow-[0_8px_15px_rgba(138,100,163,0.3)]"
+              className="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-white font-black text-[15px] lg:text-[16px] rounded-2xl py-4 transition-all cursor-pointer shadow-[0_8px_15px_rgba(138,100,163,0.3)]"
             >
-              <CertificateIcon className="w-5 h-5" />
+              <CertificateIcon className="w-5 h-5 lg:w-6 lg:h-6" />
               Ver mis certificados
             </motion.button>
           </div>
@@ -142,16 +144,17 @@ export default function AboutSection() {
               exit={{ y: 20, opacity: 0, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#F8F4FA] w-full max-w-sm max-h-[85vh] rounded-[2.5rem] flex flex-col shadow-2xl overflow-hidden border border-[#E2D1EB]"
+              // Hacemos que el modal crezca en pantallas grandes
+              className="bg-[#F8F4FA] w-full max-w-sm sm:max-w-md lg:max-w-lg max-h-[85vh] rounded-[2.5rem] flex flex-col shadow-2xl overflow-hidden border border-[#E2D1EB]"
             >
               
               {/* Cabecera Limpia */}
               <div className="flex justify-between items-center px-7 py-6 bg-white border-b border-[#E2D1EB] z-10 shrink-0 rounded-t-[2.5rem]">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-[#F4EBF7] flex items-center justify-center">
-                    <CertificateIcon className="w-4 h-4 text-[#8A64A3]" />
+                  <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-[#F4EBF7] flex items-center justify-center">
+                    <CertificateIcon className="w-4 h-4 lg:w-5 lg:h-5 text-[#8A64A3]" />
                   </div>
-                  <h3 className="font-nunito font-black text-lg text-[#4A2559] tracking-tight">
+                  <h3 className="font-nunito font-black text-lg lg:text-xl text-[#4A2559] tracking-tight">
                     Trayectoria
                   </h3>
                 </div>
@@ -160,14 +163,14 @@ export default function AboutSection() {
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setIsModalOpen(false)} 
-                  className="bg-[#F4EBF7] p-2.5 rounded-full text-[#8A64A3] hover:bg-[#4A2559] hover:text-white transition-colors"
+                  className="bg-[#F4EBF7] p-2.5 rounded-full text-[#8A64A3] hover:bg-[#4A2559] hover:text-white transition-colors cursor-pointer"
                 >
                   <CloseIcon className="w-5 h-5" />
                 </motion.button>
               </div>
 
-              {/* Lista de Certificados Interactivos (overscroll-contain para prevenir bugs móviles) */}
-              <div className="overflow-y-auto overscroll-contain px-5 py-6 flex flex-col gap-4 hide-scrollbar">
+              {/* Lista de Certificados Interactivos */}
+              <div className="overflow-y-auto overscroll-contain px-5 py-6 lg:px-7 flex flex-col gap-4 hide-scrollbar">
                 {CERTIFICADOS.map((cert, index) => (
                   <motion.div 
                     layout
@@ -176,22 +179,22 @@ export default function AboutSection() {
                     transition={{ delay: index * 0.08, layout: { duration: 0.3 } }}
                     key={cert.id} 
                     onClick={() => toggleCert(cert.id)}
-                    className="group bg-white p-5 rounded-2xl shadow-[0_2px_10px_rgba(74,37,89,0.03)] border border-[#E2D1EB] flex flex-col hover:border-[#8A64A3] transition-colors cursor-pointer"
+                    className="group bg-white p-5 lg:p-6 rounded-2xl shadow-[0_2px_10px_rgba(74,37,89,0.03)] border border-[#E2D1EB] flex flex-col hover:border-[#8A64A3] transition-colors cursor-pointer"
                   >
                     {/* Fila principal del certificado */}
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex flex-col gap-1.5 flex-1">
-                        <span className="self-start bg-[#F4EBF7] text-[#8A64A3] text-[9.5px] font-black px-2.5 py-1 rounded-md tracking-wider">
+                        <span className="self-start bg-[#F4EBF7] text-[#8A64A3] text-[9.5px] lg:text-[10.5px] font-black px-2.5 py-1 rounded-md tracking-wider">
                           {cert.anio}
                         </span>
-                        <h4 className="font-extrabold text-[13.5px] text-[#4A2559] leading-tight pr-2">
+                        <h4 className="font-extrabold text-[13.5px] lg:text-[15px] text-[#4A2559] leading-tight pr-2">
                           {cert.titulo}
                         </h4>
                       </div>
                       
                       {/* Icono de flecha animado */}
-                      <div className="shrink-0 w-7 h-7 rounded-full bg-[#F8F4FA] flex items-center justify-center text-[#8A64A3] group-hover:bg-[#E2D1EB] transition-colors">
-                        <ChevronIcon className="w-3.5 h-3.5" expanded={expandedCert === cert.id} />
+                      <div className="shrink-0 w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-[#F8F4FA] flex items-center justify-center text-[#8A64A3] group-hover:bg-[#E2D1EB] transition-colors">
+                        <ChevronIcon className="w-3.5 h-3.5 lg:w-4 lg:h-4" expanded={expandedCert === cert.id} />
                       </div>
                     </div>
 
@@ -204,8 +207,8 @@ export default function AboutSection() {
                           exit={{ height: 0, opacity: 0, marginTop: 0 }}
                           className="overflow-hidden"
                         >
-                          <hr className="border-[#F4EBF7] mb-3" />
-                          <p className="text-[12.5px] font-semibold text-[#6A527A] leading-relaxed">
+                          <hr className="border-[#F4EBF7] mb-3 lg:mb-4" />
+                          <p className="text-[12.5px] lg:text-[14px] font-semibold text-[#6A527A] leading-relaxed">
                             {cert.descripcion}
                           </p>
                         </motion.div>

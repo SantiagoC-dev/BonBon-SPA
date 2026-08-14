@@ -1,4 +1,5 @@
 // src/sections/Footer.jsx
+import { motion } from 'framer-motion';
 import { FacebookIcon, InstagramIcon } from '../components/Icons';
 import pastelImg from '../assets/FooterCake.svg'; 
 
@@ -11,62 +12,89 @@ const TikTokIcon = ({ className }) => (
 
 export default function Footer() {
   return (
-
-    <footer className="relative z-20 bg-[#3a1c42] px-6 pb-12 flex flex-col items-center">
+    <footer className="relative z-20 bg-[#4A2559] px-6 pb-12 pt-8 flex flex-col items-center">
       
-      <div className="relative -mt-24 sm:-mt-32 z-30 mb-8 pointer-events-none">
-        <img 
-          src={pastelImg} 
-          alt="Pastel decorado de BonBon" 
-          className="w-56 sm:w-64 h-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.4)]"
-        />
-      </div>
+      {/* Contenedor Principal Responsivo (Columna en Móvil, Fila en Desktop) */}
+      <div className="w-full max-w-[1000px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 relative z-10">
 
-      <div className="flex gap-5 mb-10 relative z-10">
-        <a 
-          href="https://www.facebook.com/profile.php?id=61591267478986" 
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Facebook" 
-          className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/25 hover:scale-110 transition-all duration-300 shadow-lg border border-white/5"
-        >
-          <FacebookIcon className="w-6 h-6" />
-        </a>
-        <a 
-          href="https://www.instagram.com/_booonn__?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram" 
-          className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/25 hover:scale-110 transition-all duration-300 shadow-lg border border-white/5"
-        >
-          <InstagramIcon className="w-6 h-6" />
-        </a>
-        <a 
-          href="https://www.tiktok.com/@boonn309?is_from_webapp=1&sender_device=pc" 
-          target="_blank"
-          rel="noopener noreferrer" 
-          aria-label="TikTok" 
-          className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/25 hover:scale-110 transition-all duration-300 shadow-lg border border-white/5"
-        >
-          <TikTokIcon className="w-6 h-6" />
-        </a>
-      </div>
+        {/* ==========================================
+            1. BLOQUE DE MARCA (Izquierda en PC, Abajo en Móvil)
+            ========================================== */}
+        <div className="order-3 lg:order-1 flex-1 text-center lg:text-left text-white/80 space-y-2 lg:space-y-3">
+          <h3 className="font-nunito font-black text-3xl lg:text-4xl text-white tracking-wide">
+            Bon Bon
+          </h3>
+          <p className="text-sm lg:text-base font-semibold italic text-white/70">
+            "Endulzando tus momentos especiales"
+          </p>
+          
+          <div className="w-16 h-[2px] bg-white/20 mx-auto lg:mx-0 my-4 lg:my-6 rounded-full"></div>
+          
+          <p className="text-[10px] lg:text-[11px] font-bold tracking-widest uppercase text-white/40 pt-2 lg:pt-0">
+            © {new Date().getFullYear()} Bon Bon.<br className="lg:hidden" /> Todos los derechos reservados.
+          </p>
+        </div>
 
-      <div className="text-center text-white/80 space-y-2 relative z-10">
-        <h3 className="font-nunito font-black text-2xl text-white tracking-wide">
-          Bon Bon
-        </h3>
-        <p className="text-sm font-semibold italic text-white/70">
-          "Endulzando tus momentos especiales"
-        </p>
-        
-        <div className="w-16 h-[2px] bg-white/20 mx-auto my-4 rounded-full"></div>
-        
-        <p className="text-[10px] font-bold tracking-widest uppercase text-white/40 pt-2">
-          © {new Date().getFullYear()} Bon Bon. Todos los derechos reservados.
-        </p>
-      </div>
+        {/* ==========================================
+            2. IMAGEN CENTRAL DEL PASTEL (Centro en ambos)
+            ========================================== */}
+        {/* El margen negativo tira el pastel hacia la ola del formulario superior */}
+        <motion.div 
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="order-1 lg:order-2 flex-1 flex justify-center -mt-32 sm:-mt-36 lg:-mt-48 mb-2 pointer-events-none"
+        >
+          <img 
+            src={pastelImg} 
+            alt="Pastel decorado de BonBon" 
+            className="w-64 sm:w-72 lg:w-80 h-auto object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.5)]"
+          />
+        </motion.div>
 
+        {/* ==========================================
+            3. REDES SOCIALES (Derecha en PC, Centro en Móvil)
+            ========================================== */}
+        <div className="order-2 lg:order-3 flex-1 flex justify-center lg:justify-end gap-5 lg:gap-6 w-full">
+          <motion.a 
+            whileHover={{ scale: 1.1, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            href="https://www.facebook.com/profile.php?id=61591267478986" 
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook" 
+            className="w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/25 transition-colors duration-300 shadow-lg border border-white/10"
+          >
+            <FacebookIcon className="w-6 h-6 lg:w-7 lg:h-7" />
+          </motion.a>
+          
+          <motion.a 
+            whileHover={{ scale: 1.1, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            href="https://www.instagram.com/_booonn__?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram" 
+            className="w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/25 transition-colors duration-300 shadow-lg border border-white/10"
+          >
+            <InstagramIcon className="w-6 h-6 lg:w-7 lg:h-7" />
+          </motion.a>
+          
+          <motion.a 
+            whileHover={{ scale: 1.1, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            href="https://www.tiktok.com/@boonn309?is_from_webapp=1&sender_device=pc" 
+            target="_blank"
+            rel="noopener noreferrer" 
+            aria-label="TikTok" 
+            className="w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/25 transition-colors duration-300 shadow-lg border border-white/10"
+          >
+            <TikTokIcon className="w-6 h-6 lg:w-7 lg:h-7" />
+          </motion.a>
+        </div>
+
+      </div>
     </footer>
   );
 }

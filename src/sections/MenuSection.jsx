@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 
-// ÍCONOS DE FONDO (Estrellas y Corazones)
+// ÍCONOS DE FONDO (Estrellas y Corazones) - Actualizados a blanco semi-transparente
 const StarBgIcon = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className={className}>
     <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
@@ -67,7 +67,7 @@ export default function MenuSection() {
   };
 
   return (
-    <section className="relative z-20 w-full pt-16 pb-16 sm:pt-24 sm:pb-24 mt-0">
+    <section className="relative z-20 w-full pt-16 pb-16 sm:pt-24 sm:pb-24 mt-0 bg-[#835894]">
       
       <style>{`
         @keyframes menuWaveDriftLeft {
@@ -106,7 +106,7 @@ export default function MenuSection() {
       {/* =========================================
           FONDO MÁGICO ANIMADO
           ========================================= */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.18] text-[#8A64A3]">
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-20 text-white">
         <motion.div animate={{ y: [0, -15, 0], rotate: [12, 18, 12] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }} className="absolute top-[8%] left-[8%]">
           <StarBgIcon className="w-24 h-24" />
         </motion.div>
@@ -121,30 +121,35 @@ export default function MenuSection() {
         </motion.div>
       </div>
 
-      <div className="relative z-10 w-full max-w-[1200px] mx-auto">
+      {/* ====================================================
+          CONTENEDOR GLOBAL RESPONSIVO
+          ==================================================== */}
+      <div className="relative z-10 w-full max-w-[1200px] mx-auto px-0 lg:px-6">
         
         {/* ==========================================
             SECCIÓN: CATÁLOGO PRINCIPAL
             ========================================== */}
-        <div className="px-6 text-center sm:text-left mb-6">
-          <h2 className="font-nunito font-black text-3xl sm:text-4xl text-[#3A1D47] tracking-tight leading-tight">
+        <div className="px-6 text-center sm:text-left mb-6 lg:mb-10 lg:text-center">
+          <h2 className="font-nunito font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight">
             Nuestro Catálogo <br className="sm:hidden" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-xl sm:text-2xl font-black block mt-1">
+            <span className="text-[#E2D1EB] text-xl sm:text-2xl lg:text-3xl font-black block mt-1 lg:mt-2">
               & Menú Completo
             </span>
           </h2>
         </div>
 
-        <div className="relative w-full mb-4">
+        <div className="relative w-full mb-4 lg:mb-16">
           <div 
             ref={mainScrollRef}
             onScroll={handleMainScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pl-6 gap-5 pr-6 pb-8 pt-2"
+            // En móvil: flex scroll horizontal. En Desktop: Grid de 4 columnas centrado.
+            className="flex lg:grid lg:grid-cols-4 overflow-x-auto lg:overflow-visible snap-x snap-mandatory hide-scrollbar pl-6 lg:pl-0 gap-5 lg:gap-8 pr-6 lg:pr-0 pb-8 pt-2 w-full lg:w-auto"
           >
             {MAIN_PRODUCTS.map((p) => (
               <div 
                 key={p.id} 
-                className="snap-center shrink-0 w-[75vw] max-w-[280px] relative hover:scale-[1.02] transition-transform duration-300"
+                // En móvil es tarjeta fija. En Desktop ocupa 100% de su celda de grid.
+                className="snap-center shrink-0 w-[75vw] max-w-[280px] lg:w-full lg:max-w-none relative hover:scale-[1.02] transition-transform duration-300"
               >
                 <ProductCard {...p} />
               </div>
@@ -152,14 +157,15 @@ export default function MenuSection() {
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 mb-16">
+        {/* Paginación (Oculta en Desktop porque es Grid) */}
+        <div className="flex lg:hidden justify-center gap-2 mb-16">
           {MAIN_PRODUCTS.map((_, index) => (
             <motion.div 
               key={index}
               initial={false}
               animate={{
                 width: activeMainIndex === index ? 24 : 8,
-                backgroundColor: activeMainIndex === index ? '#4A2559' : '#E2D1EB'
+                backgroundColor: activeMainIndex === index ? '#FFFFFF' : 'rgba(255,255,255,0.3)'
               }}
               transition={{ duration: 0.3 }}
               className="h-1.5 rounded-full" 
@@ -170,29 +176,29 @@ export default function MenuSection() {
         {/* ==========================================
             SECCIÓN: ITEMS DESTACADOS
             ========================================== */}
-        <div className="px-6 text-center sm:text-left mb-8">
-          <h2 className="font-nunito font-black text-3xl sm:text-4xl text-[#3A1D47] tracking-tight leading-tight">
+        <div className="px-6 text-center sm:text-left mb-8 lg:mb-12 lg:text-center mt-12 lg:mt-24">
+          <h2 className="font-nunito font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight">
             Joyas de la Corona <br className="sm:hidden" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-xl sm:text-2xl font-black block mt-1">
+            <span className="text-[#E2D1EB] text-xl sm:text-2xl lg:text-3xl font-black block mt-1 lg:mt-2">
               & Items Destacados
             </span>
           </h2>
         </div>
 
         {/* Selector de Pestañas Premium */}
-        <div className="flex gap-1 mb-10 bg-white/60 backdrop-blur-md p-1.5 rounded-full w-[90%] max-w-sm mx-auto sm:mx-6 border border-[#F5EAF1] shadow-[0_8px_20px_rgba(74,37,89,0.04)]">
+        <div className="flex gap-1 mb-10 lg:mb-14 bg-white/20 backdrop-blur-md p-1.5 rounded-full w-[90%] max-w-sm lg:max-w-md mx-auto sm:mx-6 lg:mx-auto border border-white/30 shadow-lg">
           {['nuevos', 'descuento'].map((tabItem) => {
             const isActive = tab === tabItem;
             return (
               <button
                 key={tabItem}
                 onClick={() => changeTab(tabItem)}
-                className={`relative flex-1 font-bold text-[13px] sm:text-sm py-3.5 rounded-full capitalize transition-colors duration-300 z-10 ${isActive ? 'text-white' : 'text-[#8A64A3] hover:text-[#4A2559]'}`}
+                className={`relative flex-1 font-bold text-[13px] sm:text-sm lg:text-base py-3.5 lg:py-4 rounded-full capitalize transition-colors duration-300 z-10 ${isActive ? 'text-[#4A2559]' : 'text-white/80 hover:text-white'}`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="tabUnderline"
-                    className="absolute inset-0 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] rounded-full z-[-1]"
+                    className="absolute inset-0 bg-white rounded-full z-[-1]"
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}
@@ -213,12 +219,13 @@ export default function MenuSection() {
               
               ref={featuredScrollRef}
               onScroll={handleFeaturedScroll}
-              className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar pl-6 gap-5 pr-6 pb-8 pt-2"
+              // En móvil: flex scroll horizontal. En Desktop: Grid de 2 columnas centrado
+              className="flex lg:grid lg:grid-cols-2 lg:max-w-[700px] lg:mx-auto overflow-x-auto lg:overflow-visible snap-x snap-mandatory hide-scrollbar pl-6 lg:pl-0 gap-5 lg:gap-10 pr-6 lg:pr-0 pb-8 pt-2 w-full lg:w-auto"
             >
               {featured.map((p) => (
                 <div 
                   key={p.id} 
-                  className="snap-center shrink-0 w-[75vw] max-w-[280px] relative hover:scale-[1.02] transition-transform duration-300"
+                  className="snap-center shrink-0 w-[75vw] max-w-[280px] lg:w-full lg:max-w-none relative hover:scale-[1.02] transition-transform duration-300"
                 >
                   <ProductCard {...p} />
                 </div>
@@ -227,14 +234,15 @@ export default function MenuSection() {
           </AnimatePresence>
         </div>
 
-        <div className="flex justify-center gap-2 mt-1">
+        {/* Paginación (Oculta en Desktop porque es Grid) */}
+        <div className="flex lg:hidden justify-center gap-2 mt-1">
           {featured.map((_, index) => (
             <motion.div 
               key={index}
               initial={false}
               animate={{
                 width: activeFeaturedIndex === index ? 24 : 8,
-                backgroundColor: activeFeaturedIndex === index ? '#4A2559' : '#E2D1EB'
+                backgroundColor: activeFeaturedIndex === index ? '#FFFFFF' : 'rgba(255,255,255,0.3)'
               }}
               transition={{ duration: 0.3 }}
               className="h-1.5 rounded-full" 
