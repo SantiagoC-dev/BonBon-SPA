@@ -8,6 +8,7 @@ import FeaturedCarousel from './sections/FeaturedCarousel';
 import AboutSection from './sections/AboutSection';
 import MenuSection from './sections/MenuSection';
 import DynamicForm from './sections/DynamicForm';
+import DeliveryPolicies from './sections/DeliveryPolicies';
 import Footer from './sections/Footer';
 import TalleresPage from './sections/TalleresPage';
 
@@ -24,6 +25,7 @@ const LandingPage = () => (
     <FeaturedCarousel />
     <AboutSection />
     <MenuSection />
+    <DeliveryPolicies />
     <DynamicForm />
     <Footer />
     

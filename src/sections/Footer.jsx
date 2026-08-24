@@ -12,7 +12,7 @@ const TikTokIcon = ({ className }) => (
 
 export default function Footer() {
   return (
-    <footer className="relative z-20 bg-[#4A2559] px-6 pb-12 pt-8 flex flex-col items-center">
+    <footer className="relative z-20 bg-[#4A2559] px-6 pb-12 pt-12 lg:pt-20 flex flex-col items-center">
       
       {/* Contenedor Principal Responsivo (Columna en Móvil, Fila en Desktop) */}
       <div className="w-full max-w-[1000px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 relative z-10">
