@@ -47,7 +47,7 @@ const POLICIES = [
   {
     id: 3,
     title: "Punto Medio",
-    desc: "Podemos acordar un punto de entrega intermedio que nos convenga a ambos. (Sujeto a disponibilidad de horario).",
+    desc: "Podemos acordar un punto de entrega intermedio que nos convenga a ambos. (Sujeto a disponibilidad de horario y costo adicional).",
     icon: MapPinIcon,
     delay: 0.3
   }

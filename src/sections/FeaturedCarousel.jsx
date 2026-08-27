@@ -25,8 +25,8 @@ const PRODUCTS = [
   {
     id: 3,
     title: 'Pastel de',
-    subtitle: 'vainilla',
-    desc: 'Pastel de vainilla personalizado con relleno de ganache blanco decorado con buttercream de merengue suizo.',
+    subtitle: 'chocolate',
+    desc: 'Pastel de chocolate personalizado con relleno de ganache blanco decorado con buttercream de merengue suizo.',
     img: pastelImg,
   }
 ];

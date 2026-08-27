@@ -2,7 +2,13 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
-
+import PastelImg from '../assets/PastelPerso.svg'; 
+import RamoImg from '../assets/RamoFloral.svg';
+import CajaImg from '../assets/CajaCupcakes.svg';
+import PastelMiniImg from '../assets/PastelMicky.svg';
+import PastelWell from '../assets/PastelWel.svg';
+import RamoMorado from '../assets/RamoMorado.svg';
+import CupcakesZanahoria from '../assets/CupcakesZan.svg';
 // ÍCONOS DE FONDO (Estrellas y Corazones) - Actualizados a blanco semi-transparente
 const StarBgIcon = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className={className}>
@@ -17,20 +23,20 @@ const HeartBgIcon = ({ className }) => (
 
 // DATOS ESTRATÉGICOS DEL CATÁLOGO
 const MAIN_PRODUCTS = [
-  { id: 1, name: 'Pastel Personalizado', description: 'Diseño a tu medida. Elige tamaño, sabor de pan y relleno. Cobertura impecable con nuestro característico buttercream suizo.', price: 450, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=300&auto=format&fit=crop' },
-  { id: 2, name: 'Ramo Cupcakes Florales', description: 'Hermoso arreglo comestible. Esponjosos cupcakes decorados a mano con detalladas flores de buttercream de merengue suizo.', price: 380, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=300&auto=format&fit=crop' },
-  { id: 3, name: 'Cupcakes de Zanahoria', description: 'Nuestra receta especial y especiada de zanahoria, coronados con un suave, equilibrado y delicioso buttercream de queso crema.', price: 220, image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=300&auto=format&fit=crop' },
-  { id: 4, name: 'Caja de Cupcakes', description: 'La opción perfecta para cualquier antojo. Disponibles en sabores clásicos, rellenos y decorados con merengue suizo.', price: 180, image: 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?q=80&w=300&auto=format&fit=crop' },
+  { id: 1, name: 'Pastel Personalizado', description: 'Diseño a tu medida. Elige tamaño, sabor de pan y relleno. Cobertura impecable con nuestro característico buttercream suizo.', price: 450, image: PastelImg },
+  { id: 2, name: 'Ramo Cupcakes Florales', description: 'Hermoso arreglo comestible. Esponjosos cupcakes decorados a mano con detalladas flores de buttercream de merengue suizo.', price: 380, image: RamoImg },
+  { id: 3, name: 'Cupcakes de Zanahoria', description: 'Nuestra receta especial y especiada de zanahoria, coronados con un suave, equilibrado y delicioso buttercream de queso crema.', price: 220, image: CupcakesZanahoria },
+  { id: 4, name: 'Caja de Cupcakes', description: 'La opción perfecta para cualquier antojo. Disponibles en sabores clásicos, rellenos y decorados con merengue suizo.', price: 180, image: CajaImg },
 ];
 
 const FEATURED_NEW = [
-  { id: 10, name: 'Pastel Dulce de Leche', description: 'Exquisito pastel de vainilla relleno con abundante dulce de leche artesanal y cubierto con nuestro buttercream especial.', price: 500, image: 'https://images.unsplash.com/photo-162146656027e-4b1bd88f4028?q=80&w=300&auto=format&fit=crop', badge: 'Nuevo' },
-  { id: 11, name: 'Cupcakes de Zanahoria', description: 'Cupcakes de zanahoria decorados con buttercream de queso crema y detalles premium.', price: 250, image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=300&auto=format&fit=crop', badge: 'Nuevo' },
+  { id: 10, name: 'Pastel Dulce de Leche', description: 'Exquisito pastel de vainilla relleno con abundante dulce de leche artesanal y cubierto con nuestro buttercream especial.', price: 500, image: PastelMiniImg, badge: 'Nuevo' },
+  { id: 11, name: 'Cupcakes de Zanahoria', description: 'Cupcakes de zanahoria decorados con buttercream de queso crema y detalles premium.', price: 250, image: CupcakesZanahoria, badge: 'Nuevo' },
 ];
 
 const FEATURED_SALE = [
-  { id: 20, name: 'Pastel Ganache (21cm)', description: 'Pastel personalizado de 21cm, con exquisito relleno de ganache semiamargo. Ideal para celebraciones inolvidables.', price: 580, oldPrice: 650, image: 'https://images.unsplash.com/photo-1542826438-bd32f43d626f?q=80&w=300&auto=format&fit=crop', badge: 'Oferta' },
-  { id: 21, name: 'Ramo Mixto (12pz)', description: 'Impresionante ramo floral de 12 piezas. Sabores mixtos, rellenos y decorados con arte botánico en buttercream.', price: 420, oldPrice: 480, image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=300&auto=format&fit=crop', badge: 'Oferta' },
+  { id: 20, name: 'Pastel Ganache (21cm)', description: 'Pastel personalizado de 21cm, con exquisito relleno de ganache semiamargo. Ideal para celebraciones inolvidables.', price: 580, oldPrice: 650, image: PastelWell, badge: 'Oferta' },
+  { id: 21, name: 'Ramo Mixto (12pz)', description: 'Impresionante ramo floral de 12 piezas. Sabores mixtos, rellenos y decorados con arte botánico en buttercream.', price: 420, oldPrice: 480, image: RamoMorado, badge: 'Oferta' },
 ];
 
 export default function MenuSection() {
