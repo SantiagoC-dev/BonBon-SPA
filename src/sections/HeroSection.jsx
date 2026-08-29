@@ -5,7 +5,7 @@ import { ArrowRight } from '../components/Icons';
 import { Link } from 'react-router-dom';
 
 // Tus imágenes
-import bonBonTexto from '../assets/BonBon.svg';
+import bonBonTexto from '../assets/BonBon.png';
 import PastelImage from '../assets/PastelVin.png';
 
 // Íconos para la barra de navegación superior
@@ -98,7 +98,7 @@ export default function HeroSection() {
           =========================================== */}
       <header className="relative z-50 w-full max-w-[1200px] mx-auto flex justify-between items-center mb-10 sm:mb-14 lg:mb-20">
 
-        {/* Logo en SVG */}
+        {/* Logo en PNG (Ajustado para verse mucho más grande) */}
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -108,7 +108,8 @@ export default function HeroSection() {
           <img
             src={bonBonTexto}
             alt="Bon Bon Logo"
-            className="h-14 sm:h-16 md:h-20 lg:h-28 w-auto object-contain"
+            // Clases de altura incrementadas drásticamente para compensar el padding del PNG
+            className="h-20 sm:h-24 md:h-28 lg:h-32 w-auto object-contain transform origin-left"
           />
         </motion.div>
 

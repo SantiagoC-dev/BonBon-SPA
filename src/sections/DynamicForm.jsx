@@ -54,12 +54,12 @@ export default function DynamicForm() {
     else if (categoria === 'ramo') {
       mensaje += `- Cantidad: ${formData.cantidadRamo}\n`;
       mensaje += `- Sabor: ${formData.saborRamo}\n`;
-      mensaje += `- ¿Lleva relleno?: ${formData.rellenoRamo}\n`;
+      mensaje += `- Relleno: ${formData.rellenoRamo}\n`;
     }
     else if (categoria === 'caja') {
       mensaje += `- Cantidad: ${formData.cantidadCaja}\n`;
       mensaje += `- Sabor: ${formData.saborCaja}\n`;
-      mensaje += `- ¿Lleva relleno?: ${formData.rellenoCaja}\n`;
+      mensaje += `- Relleno: ${formData.rellenoCaja}\n`;
     }
     else if (categoria === 'zanahoria') {
       mensaje += `- Presentación: ${formData.presentacionZanahoria}\n`;
@@ -213,8 +213,12 @@ export default function DynamicForm() {
               {formData.categoria === 'ramo' && (
                 <motion.div {...formAnimation} className="space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1">
                   {['cantidadRamo', 'saborRamo', 'rellenoRamo'].map((field, idx) => {
-                    const placeholders = ['Cantidad...', 'Sabor...', '¿Llevan relleno?'];
-                    const options = [['7 pz', '12 pz', '19 pz'], ['Vainilla', 'Chocolate', 'Mixto'], ['Sí', 'No']];
+                    const placeholders = ['Cantidad...', 'Sabor...', 'Relleno...'];
+                    const options = [
+                      ['7 pz', '12 pz', '19 pz'], 
+                      ['Vainilla', 'Chocolate', 'Mixto'], 
+                      ['Sin relleno', 'Ganache semi amargo', 'Ganache blanco', 'Dulce de leche']
+                    ];
                     return (
                       <div className="relative" key={field}>
                         <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[16px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">
@@ -235,8 +239,12 @@ export default function DynamicForm() {
               {formData.categoria === 'caja' && (
                 <motion.div {...formAnimation} className="space-y-3 border-l-4 border-[#8A64A3] pl-4 py-1">
                   {['cantidadCaja', 'saborCaja', 'rellenoCaja'].map((field, idx) => {
-                    const placeholders = ['Cantidad...', 'Sabor...', '¿Llevan relleno?'];
-                    const options = [['4 pz', '6 pz', '12 pz'], ['Vainilla', 'Chocolate', 'Mixto'], ['Sí', 'No']];
+                    const placeholders = ['Cantidad...', 'Sabor...', 'Relleno...'];
+                    const options = [
+                      ['4 pz', '6 pz', '12 pz'], 
+                      ['Vainilla', 'Chocolate', 'Mixto'], 
+                      ['Sin relleno', 'Ganache semi amargo', 'Ganache blanco', 'Dulce de leche']
+                    ];
                     return (
                       <div className="relative" key={field}>
                         <select name={field} value={formData[field]} onChange={handleChange} required className="w-full appearance-none rounded-xl border border-white/60 bg-white/60 px-4 py-3 pr-10 text-[16px] font-semibold text-[#6A527A] focus:outline-none focus:bg-white focus:border-[#8A64A3] shadow-sm cursor-pointer">

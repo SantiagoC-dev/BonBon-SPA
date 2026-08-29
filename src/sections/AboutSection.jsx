@@ -36,7 +36,7 @@ const CERTIFICADOS = [
     id: 1, 
     titulo: "Decorado vintage y técnicas clásicas de pastelería", 
     anio: "2026",
-    descripcion: "Curso en decorado vintage y técnicas clásicas de pastelería, incluyendo glaseado, modelado y presentación."
+    descripcion: "Curso en decorado de cupcakes y técnicas clásicas de pastelería, incluyendo glaseado, modelado y presentación."
   },
   {
     id: 2, 

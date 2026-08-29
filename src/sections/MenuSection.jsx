@@ -34,7 +34,7 @@ const MAIN_PRODUCTS = [
 
 // NUEVOS AGREGADOS (Sin precio, para mantener congruencia con el catálogo base)
 const FEATURED_NEW = [
-  { id: 10, name: 'Pastel Ganache (21cm)', description: 'Pastel personalizado de 21cm, con exquisito relleno de ganache semiamargo. Ideal para celebraciones inolvidables.', image: PastelWell, badge: 'Nuevo' },
+  { id: 10, name: 'Pastel personalizado (10cm)', description: 'Pastel personalizado de 10cm, con sabor y relleno a tu elección. Ideal para celebraciones inolvidables.', image: PastelWell, badge: 'Nuevo' },
   { id: 11, name: 'Cupcakes de Zanahoria', description: 'Cupcakes de zanahoria decorados con buttercream de queso crema y detalles premium listos para regalar.', image: CupcakesZanahoria, badge: 'Nuevo' },
 ];
 
@@ -42,12 +42,12 @@ const FEATURED_NEW = [
 const FEATURED_SALE = [
   { 
     id: 20, 
-    name: 'Pastel Dulce de Leche', 
+    name: 'Pastel con dulce de leche', 
     description: 'Exquisito relleno de abundante dulce de leche artesanal. ¡Tienes 20% de descuento! (Nota: El precio final puede variar según el diseño solicitado).', 
-    price: 400, // 20% off de 500
-    oldPrice: 500, 
+    price: 360, 
+    oldPrice: 450, 
     image: PastelMiniImg, 
-    badge: '-20% Off' 
+    badge: 'Oferta' 
   },
   { 
     id: 21, 
