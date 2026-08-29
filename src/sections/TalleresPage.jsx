@@ -31,12 +31,14 @@ const CalendarEmptyIcon = ({ className }) => (
 );
 
 export default function TalleresPage() {
-  // Configura la fecha de tu próximo evento aquí
-  const targetDate = new Date('2026-08-30T10:00:00').getTime();
+  // FECHA CORREGIDA: Sábado 29 de Agosto a las 9:30 am
+  const targetDate = new Date('2026-08-29T09:30:00').getTime();
   
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  
+  // Variable dinámica que determina si el evento ya inició o pasó
+  const isEventStarted = new Date().getTime() >= targetDate;
 
-  // Resetea el scroll de la ventana al montar este componente
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -53,13 +55,14 @@ export default function TalleresPage() {
         segundos: Math.floor((difference / 1000) % 60)
       };
     } else {
-      // Si el evento ya pasó
       timeLeft = { dias: 0, horas: 0, minutos: 0, segundos: 0 };
     }
     return timeLeft;
   }
 
   useEffect(() => {
+    if (isEventStarted) return; // Si ya empezó, no necesitamos ejecutar el timer
+    
     const timer = setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
@@ -67,7 +70,11 @@ export default function TalleresPage() {
   });
 
   const handleAsistir = () => {
-    const mensaje = `¡Hola Bon Bon! Me encantaría asistir al próximo Taller. ¿Me podrían dar más información sobre disponibilidad y métodos de pago, por favor?`;
+    // El mensaje cambia inteligentemente dependiendo si el evento ya pasó
+    const mensaje = isEventStarted
+      ? `¡Hola Bon Bon! Vi que el Taller ya está en curso. ¿Me podrían dar información para anotarme a las próximas fechas, por favor?`
+      : `¡Hola Bon Bon! Me encantaría asistir al próximo Taller. ¿Me podrían dar más información sobre disponibilidad y métodos de pago, por favor?`;
+      
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
     window.location.href = url;
   };
@@ -75,7 +82,6 @@ export default function TalleresPage() {
   return (
     <main className="relative min-h-screen font-nunito flex flex-col overflow-x-hidden w-full max-w-[100vw]">
       
-      {/* FONDO GLOBALIZADO */}
       <BackgroundDecorations tone="purple" />
 
       <style>{`
@@ -94,7 +100,6 @@ export default function TalleresPage() {
         }
       `}</style>
 
-      {/* NAVEGACIÓN SIMPLE */}
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 py-6 lg:py-10">
         <Link 
           to="/" 
@@ -107,9 +112,6 @@ export default function TalleresPage() {
         </Link>
       </header>
 
-      {/* ==========================================
-          SECCIÓN 1: PRÓXIMOS TALLERES
-          ========================================== */}
       <section className="relative z-10 flex-1 w-full max-w-[1000px] mx-auto px-6 pt-2 lg:pt-4 pb-20 flex flex-col items-center">
         
         <div className="text-center mb-8 lg:mb-12">
@@ -130,14 +132,12 @@ export default function TalleresPage() {
           </motion.p>
         </div>
 
-        {/* Tarjeta del Evento Responsiva (Columna en móvil, Fila en desktop) */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="w-full bg-white/90 backdrop-blur-md rounded-[2.5rem] lg:rounded-[3rem] shadow-[0_20px_40px_rgba(74,37,89,0.06)] border border-[#E2D1EB] overflow-hidden flex flex-col lg:flex-row items-center"
         >
-          {/* LADO IZQUIERDO: IMAGEN DEL LETRERO DE CANVA */}
           <div className="w-full lg:w-1/2 h-full bg-[#FCF9FF] flex justify-center items-center p-6 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#F5EAF1] self-stretch">
             <img 
               src={letreroTaller} 
@@ -147,26 +147,40 @@ export default function TalleresPage() {
             />
           </div>
 
-          {/* LADO DERECHO: TEXTOS Y CONTADOR */}
           <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start relative pb-10 lg:pb-12 pt-0 lg:pt-10 px-6 lg:px-10">
             
-            {/* CONTADOR DE DÍAS (Alineado a la izquierda en Desktop, sin traslaparse) */}
+            {/* LÓGICA CONDICIONAL: CONTADOR VS LETRERO "EN CURSO" */}
             <div className="-mt-8 lg:mt-0 mb-6 lg:mb-8 flex justify-center lg:justify-start relative z-20 w-full">
-              <div className="flex gap-2 sm:gap-3 bg-white/95 backdrop-blur-xl border border-[#E2D1EB]/50 p-3 lg:p-4 rounded-3xl shadow-xl lg:shadow-md">
-                {Object.entries(timeLeft).map(([unidad, valor]) => (
-                  <div key={unidad} className="flex flex-col items-center bg-[#FCF5F9] border border-[#E2D1EB] rounded-2xl w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 justify-center">
-                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-[#4A2559] leading-none">
-                      {valor.toString().padStart(2, '0')}
-                    </span>
-                    <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-[#8A64A3] uppercase tracking-wider mt-1 lg:mt-1.5">
-                      {unidad}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              {isEventStarted ? (
+                <motion.div 
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="flex items-center gap-3 bg-white/95 backdrop-blur-xl border border-[#8A64A3]/30 px-6 py-4 rounded-3xl shadow-xl lg:shadow-md"
+                >
+                  <span className="relative flex h-4 w-4">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8A64A3] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-4 w-4 bg-[#4A2559]"></span>
+                  </span>
+                  <span className="text-xl lg:text-2xl font-black text-[#4A2559] uppercase tracking-wide">
+                    ¡Taller en curso!
+                  </span>
+                </motion.div>
+              ) : (
+                <div className="flex gap-2 sm:gap-3 bg-white/95 backdrop-blur-xl border border-[#E2D1EB]/50 p-3 lg:p-4 rounded-3xl shadow-xl lg:shadow-md">
+                  {Object.entries(timeLeft).map(([unidad, valor]) => (
+                    <div key={unidad} className="flex flex-col items-center bg-[#FCF5F9] border border-[#E2D1EB] rounded-2xl w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 justify-center">
+                      <span className="text-xl sm:text-2xl lg:text-3xl font-black text-[#4A2559] leading-none">
+                        {valor.toString().padStart(2, '0')}
+                      </span>
+                      <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-[#8A64A3] uppercase tracking-wider mt-1 lg:mt-1.5">
+                        {unidad}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* TEXTO DESCRIPTIVO */}
             <div className="text-center lg:text-left flex flex-col items-center lg:items-start w-full">
               <h3 className="text-2xl lg:text-3xl font-black text-[#3A1D47] mb-3 lg:mb-4">
                 Taller BonBon:<br className="hidden lg:block"/> Decoración de Pasteles
@@ -175,6 +189,7 @@ export default function TalleresPage() {
                 Únete a nuestra sesión piloto y descubre los secretos para lograr un decorado perfecto. Aprenderemos uso de duyas, colorimetría y alisado con buttercream. ¡Incluye todos los materiales, coffee break y te llevas tu pastel a casa!
               </p>
 
+              {/* EL BOTÓN TAMBIÉN CAMBIA SI EL EVENTO YA EMPEZÓ */}
               <motion.button 
                 onClick={handleAsistir}
                 whileHover={{ scale: 1.03, y: -2, boxShadow: "0px 10px 25px rgba(74,37,89,0.25)" }}
@@ -182,7 +197,7 @@ export default function TalleresPage() {
                 className="w-full max-w-xs lg:max-w-[280px] flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-white font-black text-[15px] lg:text-[16px] rounded-2xl py-4 transition-all cursor-pointer shadow-[0_8px_15px_rgba(138,100,163,0.3)]"
               >
                 <WhatsAppIcon className="w-5 h-5 lg:w-6 lg:h-6" />
-                ¡Quiero asistir!
+                {isEventStarted ? 'Próximas fechas' : '¡Quiero asistir!'}
               </motion.button>
             </div>
           </div>
@@ -190,9 +205,6 @@ export default function TalleresPage() {
 
       </section>
 
-      {/* ==========================================
-          DIVISOR (Olas Animadas hacia sección de pasados)
-          ========================================== */}
       <div className="relative z-20 w-full h-[40px] sm:h-[60px] lg:h-[80px] overflow-hidden leading-none pointer-events-none translate-y-[1px]">
         <div className="wave-back absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
@@ -206,9 +218,6 @@ export default function TalleresPage() {
         </div>
       </div>
 
-      {/* ==========================================
-          SECCIÓN 2: TALLERES PASADOS
-          ========================================== */}
       <section className="relative z-20 w-full bg-white py-20 lg:py-28 px-6 flex flex-col items-center">
         <div className="text-center mb-10 lg:mb-12">
           <h2 className="font-nunito font-black text-3xl sm:text-4xl lg:text-5xl text-[#4A2559] tracking-tight mb-2 lg:mb-4">
@@ -217,7 +226,6 @@ export default function TalleresPage() {
           <div className="w-16 lg:w-20 h-1.5 lg:h-2 bg-[#E2D1EB] rounded-full mx-auto"></div>
         </div>
 
-        {/* Estado Vacío (Placeholder) Expandido para Desktop */}
         <div className="w-full max-w-[600px] lg:max-w-[800px] border-2 border-dashed border-[#F5EAF1] rounded-[2.5rem] lg:rounded-[3rem] py-16 lg:py-24 px-6 lg:px-12 flex flex-col items-center text-center bg-[#FCF9FF]">
           <div className="w-16 h-16 lg:w-20 lg:h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 lg:mb-6 border border-[#E2D1EB]">
             <CalendarEmptyIcon className="w-8 h-8 lg:w-10 lg:h-10 text-[#8A64A3]/50" />

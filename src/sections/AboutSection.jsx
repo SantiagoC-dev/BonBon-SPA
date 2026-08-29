@@ -36,13 +36,13 @@ const CERTIFICADOS = [
     id: 1, 
     titulo: "Decorado vintage y técnicas clásicas de pastelería", 
     anio: "2026",
-    descripcion: "Curso avanzado en decorado vintage y técnicas clásicas de pastelería, incluyendo glaseado, modelado y presentación."
+    descripcion: "Curso en decorado vintage y técnicas clásicas de pastelería, incluyendo glaseado, modelado y presentación."
   },
   {
     id: 2, 
-    titulo: "Decoración floral y texturas con crema de mantequilla de merengue suizo", 
+    titulo: "Repostería: flores de buttercream", 
     anio: "2026",
-    descripcion: "Curso avanzado en decoración floral y texturas con crema de mantequilla de merengue suizo, enfocado en técnicas de acabado y presentación profesional."
+    descripcion: "Taller especializado en la creación de flores realistas utilizando buttercream, abarcando técnicas de coloración y texturización."
   }
 ];
 

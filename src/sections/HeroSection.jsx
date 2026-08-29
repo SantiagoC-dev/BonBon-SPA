@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 // Tus imágenes
 import bonBonTexto from '../assets/BonBon.svg';
-import PastelImage from '../assets/PastelVin.svg';
+import PastelImage from '../assets/PastelVin.png';
 
 // Íconos para la barra de navegación superior
 const MenuIcon = ({ className }) => (

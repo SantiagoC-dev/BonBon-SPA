@@ -1,15 +1,18 @@
 // src/sections/MenuSection.jsx
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
-import PastelImg from '../assets/PastelPerso.svg'; 
-import RamoImg from '../assets/RamoFloral.svg';
-import CajaImg from '../assets/CajaCupcakes.svg';
-import PastelMiniImg from '../assets/PastelMicky.svg';
-import PastelWell from '../assets/PastelWel.svg';
-import RamoMorado from '../assets/RamoMorado.svg';
-import CupcakesZanahoria from '../assets/CupcakesZan.svg';
-// ÍCONOS DE FONDO (Estrellas y Corazones) - Actualizados a blanco semi-transparente
+
+// Asegúrate de que estos nombres coincidan EXACTAMENTE con tus archivos
+import PastelImg from '../assets/PastelPerso.png'; 
+import RamoImg from '../assets/RamoFloral.png';
+import CajaImg from '../assets/CajaCupcakes.png';
+import PastelMiniImg from '../assets/PastelMicky.png';
+import PastelWell from '../assets/PastelWel.png';
+import RamoMorado from '../assets/RamoMorado.png';
+import CupcakesZanahoria from '../assets/CupcakesZan.png';
+
+// ÍCONOS DE FONDO
 const StarBgIcon = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className={className}>
     <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
@@ -21,22 +24,40 @@ const HeartBgIcon = ({ className }) => (
   </svg>
 );
 
-// DATOS ESTRATÉGICOS DEL CATÁLOGO
+// CATÁLOGO PRINCIPAL (Sin precios, usamos badges para llenar visualmente la tarjeta)
 const MAIN_PRODUCTS = [
-  { id: 1, name: 'Pastel Personalizado', description: 'Diseño a tu medida. Elige tamaño, sabor de pan y relleno. Cobertura impecable con nuestro característico buttercream suizo.', price: 450, image: PastelImg },
-  { id: 2, name: 'Ramo Cupcakes Florales', description: 'Hermoso arreglo comestible. Esponjosos cupcakes decorados a mano con detalladas flores de buttercream de merengue suizo.', price: 380, image: RamoImg },
-  { id: 3, name: 'Cupcakes de Zanahoria', description: 'Nuestra receta especial y especiada de zanahoria, coronados con un suave, equilibrado y delicioso buttercream de queso crema.', price: 220, image: CupcakesZanahoria },
-  { id: 4, name: 'Caja de Cupcakes', description: 'La opción perfecta para cualquier antojo. Disponibles en sabores clásicos, rellenos y decorados con merengue suizo.', price: 180, image: CajaImg },
+  { id: 1, name: 'Pastel Personalizado', description: 'Diseño 100% a tu medida. Elige tamaño, sabor y relleno. Cobertura impecable con nuestro característico buttercream suizo.', image: PastelImg, badge: 'A cotizar' },
+  { id: 2, name: 'Ramo Cupcakes Florales', description: 'Hermoso arreglo comestible. Esponjosos cupcakes decorados a mano con detalladas flores de buttercream de merengue suizo.', image: RamoImg, badge: 'A cotizar' },
+  { id: 3, name: 'Cupcakes de Zanahoria', description: 'Nuestra receta especial y especiada de zanahoria, coronados con un suave, equilibrado y delicioso buttercream de queso crema.', image: CupcakesZanahoria, badge: 'A cotizar' },
+  { id: 4, name: 'Caja de Cupcakes', description: 'La opción perfecta para cualquier antojo. Disponibles en sabores clásicos, rellenos y decorados con merengue suizo.', image: CajaImg, badge: 'Personalizable' },
 ];
 
+// NUEVOS AGREGADOS (Sin precio, para mantener congruencia con el catálogo base)
 const FEATURED_NEW = [
-  { id: 10, name: 'Pastel Dulce de Leche', description: 'Exquisito pastel de vainilla relleno con abundante dulce de leche artesanal y cubierto con nuestro buttercream especial.', price: 500, image: PastelMiniImg, badge: 'Nuevo' },
-  { id: 11, name: 'Cupcakes de Zanahoria', description: 'Cupcakes de zanahoria decorados con buttercream de queso crema y detalles premium.', price: 250, image: CupcakesZanahoria, badge: 'Nuevo' },
+  { id: 10, name: 'Pastel Ganache (21cm)', description: 'Pastel personalizado de 21cm, con exquisito relleno de ganache semiamargo. Ideal para celebraciones inolvidables.', image: PastelWell, badge: 'Nuevo' },
+  { id: 11, name: 'Cupcakes de Zanahoria', description: 'Cupcakes de zanahoria decorados con buttercream de queso crema y detalles premium listos para regalar.', image: CupcakesZanahoria, badge: 'Nuevo' },
 ];
 
+// SECCIÓN DE DESCUENTOS (Aquí SÍ van los precios y la lógica de oferta)
 const FEATURED_SALE = [
-  { id: 20, name: 'Pastel Ganache (21cm)', description: 'Pastel personalizado de 21cm, con exquisito relleno de ganache semiamargo. Ideal para celebraciones inolvidables.', price: 580, oldPrice: 650, image: PastelWell, badge: 'Oferta' },
-  { id: 21, name: 'Ramo Mixto (12pz)', description: 'Impresionante ramo floral de 12 piezas. Sabores mixtos, rellenos y decorados con arte botánico en buttercream.', price: 420, oldPrice: 480, image: RamoMorado, badge: 'Oferta' },
+  { 
+    id: 20, 
+    name: 'Pastel Dulce de Leche', 
+    description: 'Exquisito relleno de abundante dulce de leche artesanal. ¡Tienes 20% de descuento! (Nota: El precio final puede variar según el diseño solicitado).', 
+    price: 400, // 20% off de 500
+    oldPrice: 500, 
+    image: PastelMiniImg, 
+    badge: '-20% Off' 
+  },
+  { 
+    id: 21, 
+    name: 'Ramo Mixto (12pz)', 
+    description: 'Impresionante ramo floral de 12 piezas. Sabores mixtos, rellenos y decorados con arte botánico en buttercream.', 
+    price: 452, 
+    oldPrice: 500, 
+    image: RamoMorado, 
+    badge: 'Oferta' 
+  },
 ];
 
 export default function MenuSection() {
@@ -49,27 +70,34 @@ export default function MenuSection() {
   const mainScrollRef = useRef(null);
   const featuredScrollRef = useRef(null);
 
-  const handleMainScroll = () => {
+  const handleMainScroll = useCallback(() => {
     if (mainScrollRef.current) {
       const scrollLeft = mainScrollRef.current.scrollLeft;
-      const itemWidth = mainScrollRef.current.children[0].offsetWidth + 16; 
-      const index = Math.round(scrollLeft / itemWidth);
-      setActiveMainIndex(index);
+      const itemWidth = mainScrollRef.current.children[0]?.offsetWidth || 1; 
+      const gap = 20; 
+      const index = Math.round(scrollLeft / (itemWidth + gap));
+      const safeIndex = Math.max(0, Math.min(index, MAIN_PRODUCTS.length - 1));
+      if (safeIndex !== activeMainIndex) setActiveMainIndex(safeIndex);
     }
-  };
+  }, [activeMainIndex]);
 
-  const handleFeaturedScroll = () => {
+  const handleFeaturedScroll = useCallback(() => {
     if (featuredScrollRef.current) {
       const scrollLeft = featuredScrollRef.current.scrollLeft;
-      const itemWidth = featuredScrollRef.current.children[0].offsetWidth + 16;
-      const index = Math.round(scrollLeft / itemWidth);
-      setActiveFeaturedIndex(index);
+      const itemWidth = featuredScrollRef.current.children[0]?.offsetWidth || 1;
+      const gap = 20;
+      const index = Math.round(scrollLeft / (itemWidth + gap));
+      const safeIndex = Math.max(0, Math.min(index, featured.length - 1));
+      if (safeIndex !== activeFeaturedIndex) setActiveFeaturedIndex(safeIndex);
     }
-  };
+  }, [activeFeaturedIndex, featured.length]);
 
   const changeTab = (newTab) => {
     setTab(newTab);
     setActiveFeaturedIndex(0); 
+    if (featuredScrollRef.current) {
+      featuredScrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -94,7 +122,7 @@ export default function MenuSection() {
       `}</style>
 
       {/* ==========================================
-          OLA SUPERIOR (Transición líquida)
+          OLA SUPERIOR 
           ========================================== */}
       <div className="absolute bottom-full left-0 w-full h-[36px] sm:h-[48px] overflow-hidden leading-none pointer-events-none translate-y-[1px]">
         <div className="menu-wave-top-back absolute inset-0 w-[200%] h-full flex">
@@ -109,9 +137,7 @@ export default function MenuSection() {
         </div>
       </div>
 
-      {/* =========================================
-          FONDO MÁGICO ANIMADO
-          ========================================= */}
+      {/* FONDO MÁGICO ANIMADO */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-20 text-white">
         <motion.div animate={{ y: [0, -15, 0], rotate: [12, 18, 12] }} transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }} className="absolute top-[8%] left-[8%]">
           <StarBgIcon className="w-24 h-24" />
@@ -127,19 +153,14 @@ export default function MenuSection() {
         </motion.div>
       </div>
 
-      {/* ====================================================
-          CONTENEDOR GLOBAL RESPONSIVO
-          ==================================================== */}
       <div className="relative z-10 w-full max-w-[1200px] mx-auto px-0 lg:px-6">
         
-        {/* ==========================================
-            SECCIÓN: CATÁLOGO PRINCIPAL
-            ========================================== */}
+        {/* CATÁLOGO PRINCIPAL */}
         <div className="px-6 text-center sm:text-left mb-6 lg:mb-10 lg:text-center">
           <h2 className="font-nunito font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight">
             Nuestro Catálogo <br className="sm:hidden" />
             <span className="text-[#E2D1EB] text-xl sm:text-2xl lg:text-3xl font-black block mt-1 lg:mt-2">
-              & Menú Completo
+              "Menú Completo"
             </span>
           </h2>
         </div>
@@ -148,13 +169,11 @@ export default function MenuSection() {
           <div 
             ref={mainScrollRef}
             onScroll={handleMainScroll}
-            // En móvil: flex scroll horizontal. En Desktop: Grid de 4 columnas centrado.
             className="flex lg:grid lg:grid-cols-4 overflow-x-auto lg:overflow-visible snap-x snap-mandatory hide-scrollbar pl-6 lg:pl-0 gap-5 lg:gap-8 pr-6 lg:pr-0 pb-8 pt-2 w-full lg:w-auto"
           >
             {MAIN_PRODUCTS.map((p) => (
               <div 
                 key={p.id} 
-                // En móvil es tarjeta fija. En Desktop ocupa 100% de su celda de grid.
                 className="snap-center shrink-0 w-[75vw] max-w-[280px] lg:w-full lg:max-w-none relative hover:scale-[1.02] transition-transform duration-300"
               >
                 <ProductCard {...p} />
@@ -163,7 +182,7 @@ export default function MenuSection() {
           </div>
         </div>
 
-        {/* Paginación (Oculta en Desktop porque es Grid) */}
+        {/* Paginación */}
         <div className="flex lg:hidden justify-center gap-2 mb-16">
           {MAIN_PRODUCTS.map((_, index) => (
             <motion.div 
@@ -179,19 +198,16 @@ export default function MenuSection() {
           ))}
         </div>
 
-        {/* ==========================================
-            SECCIÓN: ITEMS DESTACADOS
-            ========================================== */}
+        {/* ITEMS DESTACADOS */}
         <div className="px-6 text-center sm:text-left mb-8 lg:mb-12 lg:text-center mt-12 lg:mt-24">
           <h2 className="font-nunito font-black text-3xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight">
             Joyas de la Corona <br className="sm:hidden" />
             <span className="text-[#E2D1EB] text-xl sm:text-2xl lg:text-3xl font-black block mt-1 lg:mt-2">
-              & Items Destacados
+              "Items Destacados"
             </span>
           </h2>
         </div>
 
-        {/* Selector de Pestañas Premium */}
         <div className="flex gap-1 mb-10 lg:mb-14 bg-white/20 backdrop-blur-md p-1.5 rounded-full w-[90%] max-w-sm lg:max-w-md mx-auto sm:mx-6 lg:mx-auto border border-white/30 shadow-lg">
           {['nuevos', 'descuento'].map((tabItem) => {
             const isActive = tab === tabItem;
@@ -222,10 +238,8 @@ export default function MenuSection() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.2 }}
-              
               ref={featuredScrollRef}
               onScroll={handleFeaturedScroll}
-              // En móvil: flex scroll horizontal. En Desktop: Grid de 2 columnas centrado
               className="flex lg:grid lg:grid-cols-2 lg:max-w-[700px] lg:mx-auto overflow-x-auto lg:overflow-visible snap-x snap-mandatory hide-scrollbar pl-6 lg:pl-0 gap-5 lg:gap-10 pr-6 lg:pr-0 pb-8 pt-2 w-full lg:w-auto"
             >
               {featured.map((p) => (
@@ -240,7 +254,7 @@ export default function MenuSection() {
           </AnimatePresence>
         </div>
 
-        {/* Paginación (Oculta en Desktop porque es Grid) */}
+        {/* Paginación Secundario */}
         <div className="flex lg:hidden justify-center gap-2 mt-1">
           {featured.map((_, index) => (
             <motion.div 
@@ -259,7 +273,7 @@ export default function MenuSection() {
       </div>
 
       {/* ==========================================
-          OLA INFERIOR (Transición líquida)
+          OLA INFERIOR
           ========================================== */}
       <div className="absolute top-full left-0 w-full h-[36px] sm:h-[48px] overflow-hidden leading-none pointer-events-none -mt-[1px]">
         <div className="menu-wave-bottom-back absolute inset-0 w-[200%] h-full flex">

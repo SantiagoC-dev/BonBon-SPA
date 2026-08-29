@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 // Tus imágenes exactas
 import cupcake1 from '../assets/Ramo.svg'; 
-import cupcake2 from '../assets/Caja.svg'; 
+import cupcake2 from '../assets/Caja.png'; 
 import pastelImg from '../assets/Pastel.svg'; // Agregamos la imagen para el 3er item
 
 const PRODUCTS = [
