@@ -72,7 +72,7 @@ export default function TalleresPage() {
   const handleAsistir = () => {
     // El mensaje cambia inteligentemente dependiendo si el evento ya pasó
     const mensaje = isEventStarted
-      ? `¡Hola Bon Bon! Vi que el Taller ya está en curso. ¿Me podrían dar información para anotarme a las próximas fechas, por favor?`
+      ? `¡Hola Bon Bon! Vi que el Taller ya finalizó. ¿Me podrían dar información para anotarme a las próximas fechas, por favor?`
       : `¡Hola Bon Bon! Me encantaría asistir al próximo Taller. ¿Me podrían dar más información sobre disponibilidad y métodos de pago, por favor?`;
       
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
@@ -162,7 +162,7 @@ export default function TalleresPage() {
                     <span className="relative inline-flex rounded-full h-4 w-4 bg-[#4A2559]"></span>
                   </span>
                   <span className="text-xl lg:text-2xl font-black text-[#4A2559] uppercase tracking-wide">
-                    ¡Taller en curso!
+                    ¡Taller finalizado!
                   </span>
                 </motion.div>
               ) : (
