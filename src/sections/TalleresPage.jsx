@@ -6,12 +6,13 @@ import { Link } from 'react-router-dom';
 // IMPORTAMOS EL FONDO GLOBAL
 import BackgroundDecorations from '../components/BackgroundDecorations';
 
-// ====== IMPORTACIÓN DE NUEVOS ASSETS ======
+// ====== IMPORTACIÓN DE ASSETS ======
 // 1. Imágenes del NUEVO taller (Frente y Vuelta)
 import TallerNewFront from '../assets/TallerNew.png';
 import TallerNewBack from '../assets/TallerNewBack.png';
-// 2. Video del taller VIEJO (Vertical .MOV)
+// 2. Video del taller VIEJO y su miniatura
 import VideoViejo from '../assets/Video.MOV';
+import TallerPrueba from '../assets/TallerPrueba.png'; 
 // ==========================================
 
 const WHATSAPP_NUMBER = '525585489414';
@@ -26,18 +27,6 @@ const WhatsAppIcon = ({ className }) => (
 const ArrowLeftIcon = ({ className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-  </svg>
-);
-
-const ChevronLeftIcon = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-  </svg>
-);
-
-const ChevronRightIcon = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5 15.75 12l-7.5 7.5" />
   </svg>
 );
 
@@ -106,7 +95,7 @@ export default function TalleresPage() {
     }
   };
 
-  // Deslizar con el dedo en móvil para cambiar de imagen
+  // Deslizar con el dedo o arrastrar para cambiar de imagen
   const handleDragEnd = (_event, info) => {
     const SWIPE_THRESHOLD = 60;
     if (info.offset.x < -SWIPE_THRESHOLD) {
@@ -204,8 +193,7 @@ export default function TalleresPage() {
               aria-roledescription="carrusel"
               aria-label={`Imágenes del taller, ${currentImgIndex + 1} de ${posterImages.length}`}
               onKeyDown={handleCarouselKeyDown}
-              /* ARREGLO: aspect-[9/16] para coincidir con 1080x1920 y anchos maximos adaptados para que no sea gigante en PC */
-              className="relative w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[360px] aspect-[9/16] overflow-hidden rounded-2xl shadow-[0_10px_30px_rgba(74,37,89,0.15)] border border-[#E2D1EB] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8A64A3] focus-visible:ring-offset-2 bg-transparent"
+              className="relative w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[360px] aspect-[9/16] overflow-hidden rounded-2xl shadow-[0_10px_30px_rgba(74,37,89,0.15)] border border-[#E2D1EB] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8A64A3] focus-visible:ring-offset-2 bg-transparent cursor-grab active:cursor-grabbing"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.img
@@ -221,28 +209,9 @@ export default function TalleresPage() {
                   dragElastic={0.15}
                   onDragEnd={handleDragEnd}
                   draggable={false}
-                  /* ARREGLO: object-contain para asegurar que el 100% de la imagen sea visible sin recortes */
-                  className="absolute inset-0 w-full h-full object-contain cursor-grab active:cursor-grabbing select-none"
+                  className="absolute inset-0 w-full h-full object-contain select-none"
                 />
               </AnimatePresence>
-
-              {/* Botones de navegación (visibles en hover en desktop, siempre en móvil) */}
-              <button
-                type="button"
-                onClick={prevImage}
-                className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 bg-white/85 backdrop-blur-sm text-[#4A2559] p-2.5 rounded-full shadow-md hover:bg-white active:scale-95 transition-all z-10 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100"
-                aria-label="Imagen anterior"
-              >
-                <ChevronLeftIcon className="w-5 h-5" />
-              </button>
-              <button
-                type="button"
-                onClick={nextImage}
-                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-white/85 backdrop-blur-sm text-[#4A2559] p-2.5 rounded-full shadow-md hover:bg-white active:scale-95 transition-all z-10 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100"
-                aria-label="Siguiente imagen"
-              >
-                <ChevronRightIcon className="w-5 h-5" />
-              </button>
 
               {/* Indicadores de puntos */}
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10 bg-black/30 px-3 py-1.5 rounded-full backdrop-blur-sm">
@@ -259,8 +228,8 @@ export default function TalleresPage() {
               </div>
             </div>
 
-            <p className="mt-3 text-[#8A64A3] text-[10px] font-bold uppercase tracking-widest lg:hidden text-center">
-              Desliza o toca las flechas para ver más info
+            <p className="mt-3 text-[#8A64A3] text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-center animate-pulse">
+              Desliza para ver más info
             </p>
           </div>
 
@@ -358,7 +327,7 @@ export default function TalleresPage() {
           </h2>
           <div className="w-14 sm:w-16 lg:w-20 h-1.5 lg:h-2 bg-[#E2D1EB] rounded-full mx-auto mb-4"></div>
           <p className="text-sm lg:text-base font-semibold text-[#8A64A3] max-w-md mx-auto leading-relaxed">
-            Revive los mejores momentos de nuestro último taller. ¡Mira lo divertido que es aprender con Bon Bon!
+            Revive los mejores momentos de nuestro último taller. ¡Mira lo divertido que es aprender en BonBon!
           </p>
         </div>
 
@@ -374,6 +343,7 @@ export default function TalleresPage() {
             controls
             playsInline
             preload="metadata"
+            poster={TallerPrueba}
             className="w-full h-full object-cover rounded-[1.5rem] sm:rounded-[2rem] bg-[#FCF9FF]"
           >
             <source src={VideoViejo} />
