@@ -1,13 +1,18 @@
 // src/sections/TalleresPage.jsx
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 // IMPORTAMOS EL FONDO GLOBAL
 import BackgroundDecorations from '../components/BackgroundDecorations';
 
-// TODO: Reemplaza con la imagen real de tu letrero de Canva
-import letreroTaller from '../assets/TallerPrueba.png'; 
+// ====== IMPORTACIÓN DE NUEVOS ASSETS ======
+// 1. Imágenes del NUEVO taller (Frente y Vuelta)
+import TallerNewFront from '../assets/TallerNew.png';
+import TallerNewBack from '../assets/TallerNewBack.png';
+// 2. Video del taller VIEJO (Vertical .MOV)
+import VideoViejo from '../assets/Video.MOV';
+// ==========================================
 
 const WHATSAPP_NUMBER = '525585489414';
 
@@ -24,64 +29,105 @@ const ArrowLeftIcon = ({ className }) => (
   </svg>
 );
 
-const CalendarEmptyIcon = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+const ChevronLeftIcon = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+  </svg>
+);
+
+const ChevronRightIcon = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5 15.75 12l-7.5 7.5" />
   </svg>
 );
 
 export default function TalleresPage() {
-  // FECHA CORREGIDA: Sábado 29 de Agosto a las 9:30 am
-  const targetDate = new Date('2026-08-29T09:30:00').getTime();
-  
+  // Arreglo de imágenes para el scroll/carrusel
+  const posterImages = [TallerNewFront, TallerNewBack];
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const carouselRef = useRef(null);
+
+  // ====== FECHA DEL EVENTO: 2 de Octubre 2026 ======
+  const targetDate = new Date('2026-10-02T10:00:00').getTime();
+  // ==================================================
+
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-  
-  // Variable dinámica que determina si el evento ya inició o pasó
-  const isEventStarted = new Date().getTime() >= targetDate;
+  const [isEventStarted, setIsEventStarted] = useState(() => Date.now() >= targetDate);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   function calculateTimeLeft() {
-    const difference = targetDate - new Date().getTime();
-    let timeLeft = {};
-
-    if (difference > 0) {
-      timeLeft = {
-        dias: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        horas: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutos: Math.floor((difference / 1000 / 60) % 60),
-        segundos: Math.floor((difference / 1000) % 60)
-      };
-    } else {
-      timeLeft = { dias: 0, horas: 0, minutos: 0, segundos: 0 };
+    const difference = targetDate - Date.now();
+    if (difference <= 0) {
+      return { días: 0, horas: 0, minutos: 0, segundos: 0 };
     }
-    return timeLeft;
+    return {
+      días: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      horas: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutos: Math.floor((difference / 1000 / 60) % 60),
+      segundos: Math.floor((difference / 1000) % 60),
+    };
   }
 
   useEffect(() => {
-    if (isEventStarted) return; // Si ya empezó, no necesitamos ejecutar el timer
-    
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
+    if (isEventStarted) return;
+
+    const interval = setInterval(() => {
+      const updated = calculateTimeLeft();
+      setTimeLeft(updated);
+      if (Date.now() >= targetDate) {
+        setIsEventStarted(true);
+        clearInterval(interval);
+      }
     }, 1000);
-    return () => clearTimeout(timer);
-  });
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEventStarted]);
+
+  const nextImage = () => {
+    setCurrentImgIndex((prev) => (prev + 1) % posterImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImgIndex((prev) => (prev - 1 + posterImages.length) % posterImages.length);
+  };
+
+  // Navegación por teclado (accesibilidad) para el carrusel
+  const handleCarouselKeyDown = (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevImage();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextImage();
+    }
+  };
+
+  // Deslizar con el dedo en móvil para cambiar de imagen
+  const handleDragEnd = (_event, info) => {
+    const SWIPE_THRESHOLD = 60;
+    if (info.offset.x < -SWIPE_THRESHOLD) {
+      nextImage();
+    } else if (info.offset.x > SWIPE_THRESHOLD) {
+      prevImage();
+    }
+  };
 
   const handleAsistir = () => {
-    // El mensaje cambia inteligentemente dependiendo si el evento ya pasó
     const mensaje = isEventStarted
-      ? `¡Hola Bon Bon! Vi que el Taller ya finalizó. ¿Me podrían dar información para anotarme a las próximas fechas, por favor?`
-      : `¡Hola Bon Bon! Me encantaría asistir al próximo Taller. ¿Me podrían dar más información sobre disponibilidad y métodos de pago, por favor?`;
-      
+      ? `¡Hola Bon Bon! Vi que el Taller Otoñal ya finalizó. ¿Me podrían dar información para anotarme a las próximas fechas, por favor?`
+      : `¡Hola Bon Bon! Me encantaría inscribirme al Taller de Decoración de Temporada Otoñal y aprovechar el descuento del mes patrio. ¿Me dan info?`;
+
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
     window.location.href = url;
   };
 
   return (
     <main className="relative min-h-screen font-nunito flex flex-col overflow-x-hidden w-full max-w-[100vw]">
-      
+
       <BackgroundDecorations tone="purple" />
 
       <style>{`
@@ -98,81 +144,158 @@ export default function TalleresPage() {
         @media (prefers-reduced-motion: reduce) {
           .wave-back, .wave-front { animation: none; }
         }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
       `}</style>
 
-      <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 py-6 lg:py-10">
-        <Link 
-          to="/" 
-          className="group inline-flex items-center gap-3 text-[#8A64A3] font-bold text-sm lg:text-base hover:text-[#4A2559] transition-colors"
+      <header className="relative z-10 w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-5 sm:py-6 lg:py-10">
+        <Link
+          to="/"
+          className="group inline-flex items-center gap-2.5 sm:gap-3 text-[#8A64A3] font-bold text-sm lg:text-base hover:text-[#4A2559] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8A64A3] rounded-full"
         >
-          <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-white shadow-sm flex items-center justify-center border border-[#E2D1EB] group-hover:-translate-x-1 transition-transform">
+          <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-white shadow-sm flex items-center justify-center border border-[#E2D1EB] group-hover:-translate-x-1 transition-transform shrink-0">
             <ArrowLeftIcon className="w-4 h-4 lg:w-5 lg:h-5" />
           </div>
           Volver al inicio
         </Link>
       </header>
 
-      <section className="relative z-10 flex-1 w-full max-w-[1000px] mx-auto px-6 pt-2 lg:pt-4 pb-20 flex flex-col items-center">
-        
+      {/* ==========================================
+          SECCIÓN 1: PRÓXIMO TALLER
+          ========================================== */}
+      <section className="relative z-10 flex-1 w-full max-w-[1000px] mx-auto px-4 sm:px-6 pt-2 lg:pt-4 pb-16 sm:pb-20 flex flex-col items-center">
+
         <div className="text-center mb-8 lg:mb-12">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-black text-4xl sm:text-5xl lg:text-6xl text-[#4A2559] tracking-tight mb-2 lg:mb-3"
+            className="font-black text-3xl sm:text-5xl lg:text-6xl text-[#4A2559] tracking-tight mb-2 lg:mb-3 px-2 sm:px-4"
           >
-            Próximos Talleres
+            Próximo Taller
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-sm lg:text-base font-bold text-[#8A64A3] uppercase tracking-widest"
+            className="text-xs sm:text-base font-bold text-[#8A64A3] uppercase tracking-widest px-4"
           >
-            Aprende y crea con nosotros
+            Inscríbete y crea magia otoñal con nosotros
           </motion.p>
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="w-full bg-white/90 backdrop-blur-md rounded-[2.5rem] lg:rounded-[3rem] shadow-[0_20px_40px_rgba(74,37,89,0.06)] border border-[#E2D1EB] overflow-hidden flex flex-col lg:flex-row items-center"
+          className="w-full bg-white/90 backdrop-blur-md rounded-[2rem] sm:rounded-[2.5rem] lg:rounded-[3rem] shadow-[0_20px_40px_rgba(74,37,89,0.06)] border border-[#E2D1EB] overflow-hidden flex flex-col lg:flex-row items-stretch lg:items-center"
         >
-          <div className="w-full lg:w-1/2 h-full bg-[#FCF9FF] flex justify-center items-center p-6 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#F5EAF1] self-stretch">
-            <img 
-              src={letreroTaller} 
-              alt="Letrero del Taller BonBon" 
-              className="w-full max-w-md lg:max-w-lg h-auto object-contain rounded-2xl drop-shadow-md"
-              style={{ minHeight: '250px', backgroundColor: '#f3e8f8' }} 
-            />
+          {/* === LADO IZQUIERDO: CARRUSEL DE IMÁGENES === */}
+          <div className="w-full lg:w-1/2 bg-[#FCF9FF] flex flex-col justify-center items-center p-5 sm:p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#F5EAF1] self-stretch relative group">
+
+            <div
+              ref={carouselRef}
+              tabIndex={0}
+              role="group"
+              aria-roledescription="carrusel"
+              aria-label={`Imágenes del taller, ${currentImgIndex + 1} de ${posterImages.length}`}
+              onKeyDown={handleCarouselKeyDown}
+              /* ARREGLO: aspect-[9/16] para coincidir con 1080x1920 y anchos maximos adaptados para que no sea gigante en PC */
+              className="relative w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[360px] aspect-[9/16] overflow-hidden rounded-2xl shadow-[0_10px_30px_rgba(74,37,89,0.15)] border border-[#E2D1EB] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8A64A3] focus-visible:ring-offset-2 bg-transparent"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.img
+                  key={currentImgIndex}
+                  src={posterImages[currentImgIndex]}
+                  alt={`Póster del Taller de Decoración BonBon, imagen ${currentImgIndex + 1} de ${posterImages.length}`}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.15}
+                  onDragEnd={handleDragEnd}
+                  draggable={false}
+                  /* ARREGLO: object-contain para asegurar que el 100% de la imagen sea visible sin recortes */
+                  className="absolute inset-0 w-full h-full object-contain cursor-grab active:cursor-grabbing select-none"
+                />
+              </AnimatePresence>
+
+              {/* Botones de navegación (visibles en hover en desktop, siempre en móvil) */}
+              <button
+                type="button"
+                onClick={prevImage}
+                className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 bg-white/85 backdrop-blur-sm text-[#4A2559] p-2.5 rounded-full shadow-md hover:bg-white active:scale-95 transition-all z-10 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100"
+                aria-label="Imagen anterior"
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                onClick={nextImage}
+                className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-white/85 backdrop-blur-sm text-[#4A2559] p-2.5 rounded-full shadow-md hover:bg-white active:scale-95 transition-all z-10 lg:opacity-0 lg:group-hover:opacity-100 lg:group-focus-within:opacity-100"
+                aria-label="Siguiente imagen"
+              >
+                <ChevronRightIcon className="w-5 h-5" />
+              </button>
+
+              {/* Indicadores de puntos */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10 bg-black/30 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                {posterImages.map((_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => setCurrentImgIndex(index)}
+                    aria-label={`Ir a la imagen ${index + 1}`}
+                    aria-current={index === currentImgIndex}
+                    className={`h-2 rounded-full transition-all duration-300 ${index === currentImgIndex ? 'w-5 bg-white' : 'w-2 bg-white/60 hover:bg-white/80'}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <p className="mt-3 text-[#8A64A3] text-[10px] font-bold uppercase tracking-widest lg:hidden text-center">
+              Desliza o toca las flechas para ver más info
+            </p>
           </div>
 
-          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start relative pb-10 lg:pb-12 pt-0 lg:pt-10 px-6 lg:px-10">
-            
-            {/* LÓGICA CONDICIONAL: CONTADOR VS LETRERO "EN CURSO" */}
-            <div className="-mt-8 lg:mt-0 mb-6 lg:mb-8 flex justify-center lg:justify-start relative z-20 w-full">
+          {/* LADO DERECHO: INFO DEL TALLER */}
+          <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start relative pb-8 sm:pb-10 lg:pb-12 pt-6 lg:pt-10 px-5 sm:px-8 lg:px-10">
+
+            <div className="mb-6 lg:mb-8 flex justify-center lg:justify-start relative z-20 w-full">
               {isEventStarted ? (
-                <motion.div 
+                <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="flex items-center gap-3 bg-white/95 backdrop-blur-xl border border-[#8A64A3]/30 px-6 py-4 rounded-3xl shadow-xl lg:shadow-md"
+                  className="flex items-center gap-2.5 sm:gap-3 bg-white/95 backdrop-blur-xl border border-[#8A64A3]/30 px-4 sm:px-6 py-3 sm:py-4 rounded-3xl shadow-md max-w-full"
                 >
-                  <span className="relative flex h-4 w-4">
+                  <span className="relative flex h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8A64A3] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-4 w-4 bg-[#4A2559]"></span>
+                    <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 bg-[#4A2559]"></span>
                   </span>
-                  <span className="text-xl lg:text-2xl font-black text-[#4A2559] uppercase tracking-wide">
-                    ¡Taller finalizado!
+                  <span className="text-lg sm:text-xl lg:text-2xl font-black text-[#4A2559] uppercase tracking-wide leading-tight">
+                    ¡Cupos Agotados!
                   </span>
                 </motion.div>
               ) : (
-                <div className="flex gap-2 sm:gap-3 bg-white/95 backdrop-blur-xl border border-[#E2D1EB]/50 p-3 lg:p-4 rounded-3xl shadow-xl lg:shadow-md">
+                <div
+                  className="grid grid-cols-4 gap-1.5 sm:gap-2.5 lg:gap-3 bg-white/95 backdrop-blur-xl border border-[#E2D1EB]/50 p-2.5 sm:p-3.5 lg:p-4 rounded-3xl shadow-md w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[380px] mx-auto lg:mx-0"
+                  aria-label="Cuenta regresiva para el inicio del taller"
+                >
                   {Object.entries(timeLeft).map(([unidad, valor]) => (
-                    <div key={unidad} className="flex flex-col items-center bg-[#FCF5F9] border border-[#E2D1EB] rounded-2xl w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 justify-center">
-                      <span className="text-xl sm:text-2xl lg:text-3xl font-black text-[#4A2559] leading-none">
+                    <div
+                      key={unidad}
+                      className="flex flex-col items-center justify-center bg-[#FCF5F9] border border-[#E2D1EB] rounded-xl sm:rounded-2xl aspect-square min-w-0"
+                    >
+                      <span className="text-base sm:text-2xl lg:text-3xl font-black text-[#4A2559] leading-none tabular-nums">
                         {valor.toString().padStart(2, '0')}
                       </span>
-                      <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-[#8A64A3] uppercase tracking-wider mt-1 lg:mt-1.5">
+                      <span className="text-[7px] sm:text-[10px] lg:text-[11px] font-bold text-[#8A64A3] uppercase tracking-wider mt-1 lg:mt-1.5 text-center leading-none">
                         {unidad}
                       </span>
                     </div>
@@ -182,22 +305,28 @@ export default function TalleresPage() {
             </div>
 
             <div className="text-center lg:text-left flex flex-col items-center lg:items-start w-full">
-              <h3 className="text-2xl lg:text-3xl font-black text-[#3A1D47] mb-3 lg:mb-4">
-                Taller BonBon:<br className="hidden lg:block"/> Decoración de Pasteles
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#3A1D47] mb-2 lg:mb-3 leading-tight px-1 lg:px-0">
+                Taller de Decoración:<br />Temporada Otoñal 🍂
               </h3>
-              <p className="text-[14px] sm:text-[15px] lg:text-[16px] text-[#6A527A] font-semibold leading-relaxed mb-8 lg:mb-10 max-w-md lg:max-w-full">
-                Únete a nuestra sesión piloto y descubre los secretos para lograr un decorado perfecto. Aprenderemos uso de duyas, colorimetría y alisado con buttercream. ¡Incluye todos los materiales, coffee break y te llevas tu pastel a casa!
+
+              <div className="inline-block bg-[#F5EDF9] text-[#4A2559] px-4 py-1.5 rounded-full mb-5 border border-[#E2D1EB] max-w-full">
+                <p className="text-[11px] sm:text-[13px] font-extrabold flex items-center gap-2 flex-wrap justify-center">
+                  🇲🇽 <span className="uppercase tracking-wider">¡Descuento especial por Mes Patrio!</span>
+                </p>
+              </div>
+
+              <p className="text-sm sm:text-[15px] lg:text-[16px] text-[#6A527A] font-semibold leading-relaxed mb-8 lg:mb-10 max-w-md lg:max-w-full px-1 lg:px-0">
+                Aprende a decorar pasteles con los colores y sabores del otoño. Uso de duyas, alisado perfecto y colorimetría otoñal. ¡Incluye materiales, coffee break y te llevas tu creación! <span className="font-bold text-[#8A64A3]">Consulta la segunda imagen para más detalles.</span>
               </p>
 
-              {/* EL BOTÓN TAMBIÉN CAMBIA SI EL EVENTO YA EMPEZÓ */}
-              <motion.button 
+              <motion.button
                 onClick={handleAsistir}
                 whileHover={{ scale: 1.03, y: -2, boxShadow: "0px 10px 25px rgba(74,37,89,0.25)" }}
                 whileTap={{ scale: 0.96 }}
-                className="w-full max-w-xs lg:max-w-[280px] flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-white font-black text-[15px] lg:text-[16px] rounded-2xl py-4 transition-all cursor-pointer shadow-[0_8px_15px_rgba(138,100,163,0.3)]"
+                className="w-full max-w-xs lg:max-w-[280px] flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#8A64A3] to-[#4A2559] text-white font-black text-sm sm:text-[15px] lg:text-[16px] rounded-2xl py-3.5 sm:py-4 transition-all cursor-pointer shadow-[0_8px_15px_rgba(138,100,163,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4A2559]"
               >
-                <WhatsAppIcon className="w-5 h-5 lg:w-6 lg:h-6" />
-                {isEventStarted ? 'Próximas fechas' : '¡Quiero asistir!'}
+                <WhatsAppIcon className="w-5 h-5 lg:w-6 lg:h-6 shrink-0" />
+                {isEventStarted ? 'Info próximas fechas' : 'Quiero mi descuento Otoñal'}
               </motion.button>
             </div>
           </div>
@@ -205,7 +334,8 @@ export default function TalleresPage() {
 
       </section>
 
-      <div className="relative z-20 w-full h-[40px] sm:h-[60px] lg:h-[80px] overflow-hidden leading-none pointer-events-none translate-y-[1px]">
+      {/* Divisor de olas */}
+      <div className="relative z-20 w-full h-[32px] sm:h-[60px] lg:h-[80px] overflow-hidden leading-none pointer-events-none translate-y-[1px]">
         <div className="wave-back absolute inset-0 w-[200%] h-full flex">
           <svg viewBox="0 0 2880 120" className="w-full h-full block" preserveAspectRatio="none">
             <path fill="#ffffff" fillOpacity="0.5" d="M0,60 C288,20 432,20 720,60 C1008,100 1152,100 1440,60 C1728,20 1872,20 2160,60 C2448,100 2592,100 2880,60 V120 H0 Z" />
@@ -218,23 +348,41 @@ export default function TalleresPage() {
         </div>
       </div>
 
-      <section className="relative z-20 w-full bg-white py-20 lg:py-28 px-6 flex flex-col items-center">
-        <div className="text-center mb-10 lg:mb-12">
-          <h2 className="font-nunito font-black text-3xl sm:text-4xl lg:text-5xl text-[#4A2559] tracking-tight mb-2 lg:mb-4">
-            Talleres Pasados
+      {/* ==========================================
+          SECCIÓN 2: TALLERES PASADOS (Video)
+          ========================================== */}
+      <section className="relative z-20 w-full bg-white py-16 sm:py-20 lg:py-28 px-4 sm:px-6 flex flex-col items-center">
+        <div className="text-center mb-8 sm:mb-10 lg:mb-16 px-2 sm:px-4">
+          <h2 className="font-nunito font-black text-2xl sm:text-4xl lg:text-5xl text-[#4A2559] tracking-tight mb-2 lg:mb-4">
+            Nuestra Experiencia
           </h2>
-          <div className="w-16 lg:w-20 h-1.5 lg:h-2 bg-[#E2D1EB] rounded-full mx-auto"></div>
-        </div>
-
-        <div className="w-full max-w-[600px] lg:max-w-[800px] border-2 border-dashed border-[#F5EAF1] rounded-[2.5rem] lg:rounded-[3rem] py-16 lg:py-24 px-6 lg:px-12 flex flex-col items-center text-center bg-[#FCF9FF]">
-          <div className="w-16 h-16 lg:w-20 lg:h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 lg:mb-6 border border-[#E2D1EB]">
-            <CalendarEmptyIcon className="w-8 h-8 lg:w-10 lg:h-10 text-[#8A64A3]/50" />
-          </div>
-          <h3 className="font-bold text-lg lg:text-2xl text-[#6A527A] mb-2 lg:mb-3">Sin eventos pasados por ahora</h3>
-          <p className="text-[13.5px] lg:text-[16px] font-semibold text-[#8A64A3]/60 max-w-sm lg:max-w-lg">
-            Muy pronto encontrarás aquí la galería de fotos y los hermosos resultados de nuestros alumnos en ediciones anteriores.
+          <div className="w-14 sm:w-16 lg:w-20 h-1.5 lg:h-2 bg-[#E2D1EB] rounded-full mx-auto mb-4"></div>
+          <p className="text-sm lg:text-base font-semibold text-[#8A64A3] max-w-md mx-auto leading-relaxed">
+            Revive los mejores momentos de nuestro último taller. ¡Mira lo divertido que es aprender con Bon Bon!
           </p>
         </div>
+
+        {/* Contenedor del video en formato vertical (estilo reel/TikTok) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="w-[min(88vw,340px)] sm:w-[380px] lg:w-[400px] xl:w-[420px] aspect-[9/16] bg-white rounded-[2rem] sm:rounded-[2.5rem] p-2.5 sm:p-4 shadow-[0_20px_50px_rgba(74,37,89,0.1)] border border-[#E2D1EB] overflow-hidden mx-auto"
+        >
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover rounded-[1.5rem] sm:rounded-[2rem] bg-[#FCF9FF]"
+          >
+            <source src={VideoViejo} />
+            Tu navegador no soporta la reproducción de este video.{' '}
+            <a href={VideoViejo} download className="underline text-[#8A64A3]">
+              Descárgalo aquí
+            </a>.
+          </video>
+        </motion.div>
       </section>
 
     </main>
